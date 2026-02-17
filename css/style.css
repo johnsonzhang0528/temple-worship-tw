@@ -1,0 +1,968 @@
+/* ============================================
+   全台廟宇一鍵參拜 — 走春拜拜不出門
+   主要樣式
+   ============================================ */
+
+/* === CSS Variables === */
+:root {
+  --red: #c0392b;
+  --dark-red: #8B0000;
+  --gold: #FFD700;
+  --dark-gold: #B8860B;
+  --lantern-red: #DC143C;
+  --bg-dark: #1a0a0a;
+  --bg-gradient: linear-gradient(180deg, #1a0a0a 0%, #2d0e0e 50%, #1a0a0a 100%);
+  --text-light: #FAEBD7;
+  --text-gold: #FFD700;
+  --shadow-glow: 0 0 20px rgba(255, 215, 0, 0.3);
+  --font-main: 'Noto Serif TC', 'Microsoft JhengHei', serif;
+  --font-display: 'Ma Shan Zheng', 'Noto Serif TC', cursive;
+}
+
+/* === Reset & Base === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--bg-dark);
+  color: var(--text-light);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.8;
+}
+
+/* === Firework Canvas === */
+#fireworkCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* === Falling Items === */
+#fallingContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  overflow: hidden;
+}
+
+.falling-item {
+  position: absolute;
+  top: -50px;
+  animation: fallDown linear forwards;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+@keyframes fallDown {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* === Header / Landing === */
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: radial-gradient(ellipse at center, #3a0f0f 0%, #1a0a0a 70%);
+  position: relative;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+.landing::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='55' text-anchor='middle' font-size='14' opacity='0.03'%3E福%3C/text%3E%3C/svg%3E") repeat;
+  background-size: 80px 80px;
+  pointer-events: none;
+}
+
+.lantern-row {
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 2rem;
+  animation: sway 3s ease-in-out infinite;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+.lantern {
+  font-size: 4rem;
+  filter: drop-shadow(0 0 15px rgba(255, 69, 0, 0.6));
+  animation: lanternGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes lanternGlow {
+  0% { filter: drop-shadow(0 0 10px rgba(255, 69, 0, 0.4)); }
+  100% { filter: drop-shadow(0 0 25px rgba(255, 69, 0, 0.8)); }
+}
+
+.landing h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  color: var(--gold);
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 4px 8px rgba(0,0,0,0.5);
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.landing .subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: #e8c9a0;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.couplet-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.couplet {
+  writing-mode: vertical-rl;
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  color: var(--gold);
+  background: linear-gradient(180deg, #8B0000, #5e0000);
+  padding: 1.5rem 0.8rem;
+  border-radius: 8px;
+  border: 2px solid var(--dark-gold);
+  box-shadow: var(--shadow-glow);
+  letter-spacing: 0.3em;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+}
+
+.couplet-center {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  color: var(--gold);
+  background: linear-gradient(135deg, #8B0000, #5e0000);
+  width: clamp(80px, 15vw, 130px);
+  height: clamp(80px, 15vw, 130px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 3px solid var(--dark-gold);
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255, 215, 0, 0.6); }
+}
+
+.start-btn {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: var(--gold);
+  background: linear-gradient(135deg, var(--dark-red), #a00);
+  border: 2px solid var(--gold);
+  padding: 1rem 3rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.2em;
+}
+
+.start-btn:hover {
+  background: linear-gradient(135deg, #a00, #c00);
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+  transform: scale(1.05);
+}
+
+/* Scroll hint */
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  animation: bounce 2s ease-in-out infinite;
+  font-size: 1.5rem;
+  color: var(--dark-gold);
+  z-index: 1;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* === Navigation Bar === */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(90deg, #2d0e0e, #4a1515, #2d0e0e);
+  border-bottom: 2px solid var(--dark-gold);
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.nav-btn {
+  font-family: var(--font-main);
+  background: transparent;
+  color: var(--text-light);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  padding: 0.5rem 1.2rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.95rem;
+}
+
+.nav-btn:hover, .nav-btn.active {
+  background: var(--dark-red);
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* === Progress Bar (集章) === */
+.progress-section {
+  background: linear-gradient(90deg, #2d0e0e, #3a1515, #2d0e0e);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+}
+
+.progress-label {
+  font-size: 1rem;
+  color: var(--gold);
+}
+
+.progress-bar {
+  width: 200px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), #FFA500);
+  border-radius: 6px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.stamp-count {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+/* === Temple Grid === */
+.temple-section {
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.region-header {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--gold);
+  margin: 2rem 0 1rem;
+  padding-left: 0.5rem;
+  border-left: 4px solid var(--gold);
+  padding-bottom: 0.3rem;
+}
+
+.temple-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.temple-card {
+  background: linear-gradient(145deg, #2d1515, #1a0808);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.temple-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.temple-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--gold);
+  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.15);
+}
+
+.temple-card:hover::before {
+  opacity: 1;
+}
+
+.temple-card .icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.temple-card .name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+}
+
+.temple-card .city {
+  font-size: 0.85rem;
+  color: #b0a090;
+  margin-bottom: 0.5rem;
+}
+
+.temple-card .deity {
+  font-size: 0.95rem;
+  color: #e8c9a0;
+}
+
+.temple-card .stamp-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.temple-card .stamp-badge.collected {
+  opacity: 1;
+  animation: stampIn 0.5s ease-out;
+}
+
+@keyframes stampIn {
+  0% { transform: scale(3) rotate(-30deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+/* === Worship Modal === */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  background: linear-gradient(180deg, #2d1010 0%, #1a0505 100%);
+  border: 2px solid var(--dark-gold);
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 0 60px rgba(255, 215, 0, 0.2);
+}
+
+.modal-header {
+  text-align: center;
+  padding: 2rem 2rem 1rem;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+}
+
+.modal-header .temple-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.modal-header h2 {
+  font-family: var(--font-display);
+  color: var(--gold);
+  font-size: 1.8rem;
+}
+
+.modal-header .temple-meta {
+  color: #b0a090;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.5rem;
+  color: var(--text-light);
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+.modal-close:hover { opacity: 1; }
+
+.modal-body {
+  padding: 1.5rem 2rem 2rem;
+}
+
+.temple-desc {
+  color: #d4b896;
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+
+.blessing-tag {
+  display: inline-block;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  color: var(--gold);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin: 0.2rem;
+}
+
+/* Worship Steps */
+.worship-steps {
+  margin-top: 2rem;
+}
+
+.step-area {
+  text-align: center;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.worship-btn {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--gold);
+  background: linear-gradient(135deg, var(--dark-red), #800);
+  border: 2px solid var(--dark-gold);
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin: 0.5rem;
+  min-width: 140px;
+}
+
+.worship-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #a00, #c00);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+  transform: scale(1.05);
+}
+
+.worship-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.worship-btn.completed {
+  background: linear-gradient(135deg, #2a5e2a, #1a3a1a);
+  border-color: #4CAF50;
+  color: #4CAF50;
+}
+
+.step-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* === Incense Animation === */
+.incense-holder {
+  position: relative;
+  width: 200px;
+  height: 250px;
+  margin: 0 auto;
+}
+
+.incense-stick {
+  position: absolute;
+  bottom: 60px;
+  width: 3px;
+  height: 120px;
+  background: linear-gradient(to top, #8B4513, #FFD700 2px, #8B4513 4px, #CD853F);
+  border-radius: 1px;
+}
+
+.incense-tip {
+  position: absolute;
+  top: -5px;
+  left: -3px;
+  width: 9px;
+  height: 9px;
+  background: #FF4500;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #FF4500, 0 0 15px #FF6347;
+  animation: flicker 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes flicker {
+  0% { opacity: 0.8; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1.1); }
+}
+
+.incense-burner {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3.5rem;
+}
+
+.bowing {
+  animation: bowAnim 0.6s ease-in-out;
+}
+
+@keyframes bowAnim {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(15deg); }
+}
+
+/* Smoke Canvas */
+.smoke-canvas {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  pointer-events: none;
+}
+
+/* === JiaoBei === */
+.jiaobei-animation {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
+}
+
+.jiaobei-piece {
+  font-size: 3rem;
+  transition: all 0.5s;
+}
+
+@keyframes tossLeft {
+  0% { transform: translateY(0) rotate(0); }
+  40% { transform: translateY(-80px) rotate(-360deg); }
+  100% { transform: translateY(0) rotate(-720deg); }
+}
+
+@keyframes tossRight {
+  0% { transform: translateY(0) rotate(0); }
+  40% { transform: translateY(-100px) rotate(360deg); }
+  100% { transform: translateY(0) rotate(720deg); }
+}
+
+.jiao-landed {
+  animation: none !important;
+}
+
+/* === Lot Drawing === */
+.lot-container {
+  display: flex;
+  justify-content: center;
+  min-height: 150px;
+}
+
+.lot-tube {
+  width: 80px;
+  height: 150px;
+  background: linear-gradient(180deg, #8B4513, #654321);
+  border-radius: 10px 10px 5px 5px;
+  position: relative;
+  border: 2px solid #A0522D;
+  overflow: visible;
+}
+
+.tube-label {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--gold);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.lot-stick {
+  position: absolute;
+  bottom: 30%;
+  width: 4px;
+  background: linear-gradient(to top, #DEB887, #F5DEB3);
+  border-radius: 2px;
+  animation: stickWiggle 0.3s ease-in-out infinite alternate;
+}
+
+.lot-stick.chosen {
+  background: #FFD700;
+  width: 6px;
+  left: 50% !important;
+  height: 100% !important;
+  bottom: 60%;
+  z-index: 5;
+}
+
+@keyframes stickWiggle {
+  0% { transform: rotate(-2deg); }
+  100% { transform: rotate(2deg); }
+}
+
+@keyframes shakeTube {
+  0%, 100% { transform: rotate(0); }
+  10% { transform: rotate(8deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(6deg); }
+  40% { transform: rotate(-6deg); }
+  50% { transform: rotate(4deg); }
+  60% { transform: rotate(-4deg); }
+  70% { transform: rotate(3deg); }
+  80% { transform: rotate(-2deg); }
+  90% { transform: rotate(1deg); }
+}
+
+@keyframes popOut {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-40px); }
+}
+
+/* === Fortune Result === */
+.fortune-result {
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.fortune-scroll {
+  background: linear-gradient(180deg, #f5e6c8, #e8d5a8, #f5e6c8);
+  color: #2d1010;
+  padding: 2rem 1.5rem;
+  border-radius: 8px;
+  margin: 1rem auto;
+  max-width: 350px;
+  border: 2px solid #B8860B;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.fortune-scroll::before,
+.fortune-scroll::after {
+  content: '';
+  position: absolute;
+  left: 10%; right: 10%;
+  height: 12px;
+  background: linear-gradient(90deg, transparent, #B8860B, transparent);
+  border-radius: 50%;
+}
+.fortune-scroll::before { top: -6px; }
+.fortune-scroll::after { bottom: -6px; }
+
+.fortune-rank {
+  display: inline-block;
+  background: var(--dark-red);
+  color: var(--gold);
+  padding: 0.3rem 1.5rem;
+  border-radius: 20px;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  border: 1px solid var(--gold);
+}
+
+.fortune-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: #5e3a1a;
+  margin-bottom: 1rem;
+}
+
+.fortune-poem {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  line-height: 2.2;
+  color: #3a1a0a;
+  white-space: pre-line;
+  margin-bottom: 1rem;
+}
+
+.fortune-interpretation {
+  font-size: 0.9rem;
+  color: #6b4a2a;
+  border-top: 1px dashed #B8860B;
+  padding-top: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.lucky-advice {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 10px;
+  color: var(--gold);
+  font-size: 1rem;
+}
+
+/* JiaoBei result display */
+.jiaobei-result {
+  text-align: center;
+  margin-top: 1rem;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.jiaobei-result .result-icon {
+  font-size: 3rem;
+}
+
+.jiaobei-result .result-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.jiaobei-result .result-name.holy { color: #4CAF50; }
+.jiaobei-result .result-name.laugh { color: var(--gold); }
+.jiaobei-result .result-name.angry { color: #e74c3c; }
+
+.jiaobei-result .result-desc {
+  font-size: 0.9rem;
+  color: #b0a090;
+}
+
+/* === Stamp Collection === */
+.stamp-collection {
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stamp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.stamp-slot {
+  aspect-ratio: 1;
+  border: 2px dashed rgba(255, 215, 0, 0.2);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #666;
+  transition: all 0.3s;
+  background: rgba(255,255,255,0.02);
+}
+
+.stamp-slot.collected {
+  border-color: var(--gold);
+  border-style: solid;
+  background: rgba(255, 215, 0, 0.05);
+  color: var(--gold);
+}
+
+.stamp-slot .stamp-icon {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+}
+
+.stamp-slot.collected .stamp-icon {
+  animation: stampIn 0.5s ease-out;
+}
+
+.stamp-slot .stamp-name {
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* === Footer === */
+.footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(255, 215, 0, 0.1);
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.footer .footer-emoji {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* === Completion Celebration === */
+.celebration-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.celebration-modal.active {
+  display: flex;
+}
+
+.celebration-content {
+  text-align: center;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.celebration-content h2 {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--gold);
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+  margin-bottom: 1rem;
+}
+
+.celebration-content p {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+}
+
+.celebration-content .big-stamp {
+  font-size: 6rem;
+  margin: 1rem 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .couplet-container { gap: 1rem; }
+  .couplet { font-size: 1rem; padding: 1rem 0.5rem; min-height: 150px; }
+  .couplet-center { font-size: 2.5rem; width: 70px; height: 70px; }
+  .temple-grid { grid-template-columns: 1fr; }
+  .nav-bar { gap: 0.3rem; }
+  .nav-btn { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+  .modal { border-radius: 15px; margin: 0.5rem; }
+  .modal-body { padding: 1rem 1.5rem 1.5rem; }
+  .stamp-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+}
+
+@media (max-width: 480px) {
+  .lantern-row { gap: 1.5rem; }
+  .lantern { font-size: 2.5rem; }
+  .fortune-scroll { padding: 1.5rem 1rem; }
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #1a0a0a; }
+::-webkit-scrollbar-thumb { background: #4a2020; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #6a3030; }
+
+/* === Utility animations === */
+.fade-in {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* === Loading Screen === */
+.loading-screen {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: opacity 0.5s;
+}
+
+.loading-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-text {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--gold);
+  margin-top: 1rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loading-icon {
+  font-size: 4rem;
+  animation: sway 1s ease-in-out infinite;
+}

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏮 全台廟宇一鍵參拜 — 走春拜拜不出門</title>
+  <meta name="description" content="過年走春拜拜行程，不用東奔西走人擠人！在家就能參拜全台知名廟宇，體驗滿滿年味互動。">
+  <meta name="theme-color" content="#8B0000">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏮</text></svg>">
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loadingScreen" class="loading-screen">
+    <div class="loading-icon">🏮</div>
+    <div class="loading-text">恭迎各路神明降臨...</div>
+  </div>
+
+  <!-- Firework Canvas -->
+  <canvas id="fireworkCanvas"></canvas>
+
+  <!-- Falling Items Container -->
+  <div id="fallingContainer"></div>
+
+  <!-- ============ Landing Section ============ -->
+  <section class="landing" id="landing">
+    <div class="lantern-row">
+      <span class="lantern">🏮</span>
+      <span class="lantern">🏮</span>
+      <span class="lantern">🏮</span>
+      <span class="lantern">🏮</span>
+      <span class="lantern">🏮</span>
+    </div>
+
+    <h1>全台廟宇一鍵參拜</h1>
+    <p class="subtitle">🧧 過年走春・線上拜拜・集章祈福 🧧</p>
+
+    <div class="couplet-container">
+      <div class="couplet">金龍獻瑞迎新歲</div>
+      <div class="couplet-center">福</div>
+      <div class="couplet">玉燕銜春報好音</div>
+    </div>
+
+    <button id="startBtn" class="start-btn">
+      🙏 開始走春參拜
+    </button>
+
+    <div class="scroll-hint">⬇️ 往下滑動</div>
+  </section>
+
+  <!-- ============ Navigation ============ -->
+  <nav class="nav-bar" id="navbar">
+    <button class="nav-btn active" data-target="all">🏯 全部廟宇</button>
+    <button class="nav-btn" data-target="north">🏙️ 北部</button>
+    <button class="nav-btn" data-target="central">🌾 中部</button>
+    <button class="nav-btn" data-target="south">🌴 南部</button>
+    <button class="nav-btn" data-target="east">🌊 東部&離島</button>
+    <button class="nav-btn" data-target="stamps">🎫 集章冊</button>
+  </nav>
+
+  <!-- ============ Progress ============ -->
+  <div class="progress-section">
+    <span class="progress-label">🏅 走春進度</span>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <span class="stamp-count" id="stampCount">0 / 18 座廟宇</span>
+  </div>
+
+  <!-- ============ Temple List ============ -->
+  <section class="temple-section" id="templeSection">
+    <h2 class="section-title">🏯 選擇廟宇開始參拜</h2>
+    <div id="templeList"></div>
+  </section>
+
+  <!-- ============ Stamp Collection ============ -->
+  <section class="stamp-collection" id="stampSection">
+    <h2 class="section-title">🎫 走春集章冊</h2>
+    <p style="text-align: center; color: #b0a090; margin-bottom: 1rem;">
+      參拜各廟宇即可收集印章，集滿全部即可獲得新春大福！
+    </p>
+    <div class="stamp-grid" id="stampGrid"></div>
+    <div style="text-align: center; margin-top: 2rem;">
+      <button id="resetBtn" class="worship-btn" style="font-size: 0.9rem; padding: 0.5rem 1.5rem;">
+        🔄 重新開始走春
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ Worship Modal ============ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-header">
+        <span class="temple-icon" id="templeIcon">🏯</span>
+        <h2 id="templeName">廟宇名稱</h2>
+        <p class="temple-meta" id="templeMeta">地區 · 主祀</p>
+      </div>
+      <div class="modal-body">
+        <p class="temple-desc" id="templeDesc">廟宇介紹</p>
+        <div id="templeBlessings"></div>
+
+        <div class="worship-steps">
+          <div class="step-buttons">
+            <button class="worship-btn" id="btnIncense">🕯️ 上香參拜</button>
+            <button class="worship-btn" id="btnJiaoBei" disabled>🌙 擲筊問卜</button>
+            <button class="worship-btn" id="btnFortune" disabled>🎋 抽籤求詩</button>
+          </div>
+          <div class="step-area" id="stepArea">
+            <p style="color: #b0a090;">🙏 點擊「上香參拜」開始參拜流程</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Celebration Modal ============ -->
+  <div class="celebration-modal" id="celebrationModal">
+    <div class="celebration-content">
+      <div class="big-stamp">🏆</div>
+      <h2>🎊 恭喜完成全台走春！🎊</h2>
+      <p>您已參拜全台所有廟宇</p>
+      <p>新的一年必定 — 諸事大吉、萬事如意！</p>
+      <p style="margin-top: 2rem; font-size: 3rem;">🧧🎆🏮🎉🧨</p>
+      <p style="margin-top: 1rem; color: #b0a090; font-size: 0.9rem;">（點擊任意處關閉）</p>
+    </div>
+  </div>
+
+  <!-- ============ Footer ============ -->
+  <footer class="footer">
+    <div class="footer-emoji">🏮🧧🎊</div>
+    <p>全台廟宇一鍵參拜 — 走春拜拜不出門</p>
+    <p>恭喜發財 🧧 新年快樂 🎆 闔家平安</p>
+    <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #555;">
+      本服務僅供走春趣味體驗，請尊重各廟宇信仰文化 🙏
+    </p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/temples.js"></script>
+  <script src="js/fortune.js"></script>
+  <script src="js/effects.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
