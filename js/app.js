@@ -221,6 +221,10 @@ function openTemple(temple) {
   resetWorshipArea();
   modal.classList.add('active');
 
+  // Scroll modal to top
+  const modalBox = modal.querySelector('.modal');
+  if (modalBox) modalBox.scrollTop = 0;
+
   // 小鞭炮
   state.fireworks.start();
   state.fireworks.createFirework(window.innerWidth / 2, window.innerHeight / 3);
@@ -260,12 +264,19 @@ function resetWorshipArea() {
   document.getElementById('btnDonation').onclick = doDonation;
 }
 
+/** 將 stepArea 平滑捲動到可視範圍 */
+function scrollToStepArea() {
+  const el = document.getElementById('stepArea');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
 async function doIncense() {
   const stepArea = document.getElementById('stepArea');
   const btn = document.getElementById('btnIncense');
   btn.disabled = true;
 
   stepArea.innerHTML = '<p style="color: var(--gold); font-size: 1.15rem; line-height: 2;">🕯️ 正在幫您點燃三炷清香...</p>';
+  scrollToStepArea();
 
   setTimeout(() => {
     stepArea.innerHTML = '';
@@ -346,6 +357,7 @@ async function doIncense() {
 async function doJiaoBei() {
   const stepArea = document.getElementById('stepArea');
   stepArea.innerHTML = '<p style="color: var(--gold); font-size: 1.3rem; font-family: var(--font-display); line-height: 2;">🙏 誠心向神明擲筊中...</p>';
+  scrollToStepArea();
 
   const animContainer = document.createElement('div');
   animContainer.className = 'jiaobei-animation';
@@ -403,6 +415,7 @@ async function doJiaoBei() {
 async function doFortune() {
   const stepArea = document.getElementById('stepArea');
   stepArea.innerHTML = '<p style="color: var(--gold); font-size: 1.3rem; font-family: var(--font-display); line-height: 2;">🎋 正在幫您搖籤筒...</p>';
+  scrollToStepArea();
 
   // Lot tube animation
   const lotContainer = document.createElement('div');
@@ -463,6 +476,7 @@ function doDonation() {
   const prevDonation = state.donations[temple.id] || 0;
 
   stepArea.innerHTML = '';
+  scrollToStepArea();
   const donationUI = document.createElement('div');
   donationUI.className = 'donation-area fade-in';
   donationUI.innerHTML = `

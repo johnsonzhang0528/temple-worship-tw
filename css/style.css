@@ -529,16 +529,19 @@ body {
 .modal-header .temple-icon {
   font-size: 3rem;
   display: block;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.4rem;
 }
 
 .modal-header .temple-icon img {
-  width: 74px;
-  height: 74px;
+  width: 90%;
+  max-width: 260px;
+  height: auto;
+  max-height: 200px;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: 16px;
-  border: 2px solid rgba(255, 215, 0, 0.25);
-  box-shadow: 0 0 18px rgba(255, 215, 0, 0.12);
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  box-shadow: 0 4px 24px rgba(255, 215, 0, 0.15), 0 0 40px rgba(0,0,0,0.3);
   background: rgba(0,0,0,0.25);
 }
 
@@ -1639,8 +1642,9 @@ body {
   .modal-overlay { align-items: center; padding: 1rem; }
   .modal-header { padding: 1.5rem 2rem 1rem; }
   .modal-header .temple-icon { font-size: 4rem; }
+  .modal-header .temple-icon img { max-width: 320px; max-height: 240px; }
 
-  .modal-header .temple-icon img { width: 86px; height: 86px; }
+  /* photo already responsive via max-width */
   .modal-header h2 { font-size: 1.8rem; }
   .modal-body { padding: 1.2rem 1.8rem 1.8rem; }
 
@@ -1687,8 +1691,9 @@ body {
 
   .modal { max-width: 650px; }
   .modal-header .temple-icon { font-size: 5rem; }
+  .modal-header .temple-icon img { max-width: 400px; max-height: 280px; }
 
-  .modal-header .temple-icon img { width: 96px; height: 96px; }
+  /* photo already responsive via max-width */
   .modal-header h2 { font-size: 2.1rem; }
   .modal-close { width: 46px; height: 46px; font-size: 1.6rem; }
   .worship-btn { font-size: 1.2rem; padding: 0.9rem 2rem; }
