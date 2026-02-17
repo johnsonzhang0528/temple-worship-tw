@@ -60,7 +60,7 @@ function renderTemples() {
     const header = document.createElement('div');
     header.className = 'region-header';
     header.id = `region-${regionKey}`;
-    header.innerHTML = `${region.icon} ${region.name} <small style="font-size:0.85rem;color:#c8b090;">— ${region.cities}</small>`;
+    header.innerHTML = `${region.icon} ${region.name} <small>— ${region.cities}</small>`;
     container.appendChild(header);
 
     const grid = document.createElement('div');
@@ -512,19 +512,177 @@ function processDonation(amount) {
   // Blessing message
   showDonationBlessing(amount);
 
-  // Effects based on amount
-  if (amount >= 1000) {
+  // ===== 過年走春特效 — 根據金額分級 =====
+  if (amount >= 5000) {
+    // 🐉 超級大功德主 — 全特效齊發！
     state.fireworks.start();
-    state.fireworks.burst(4);
-    state.falling.drop(20);
+    state.fireworks.burst(8);
+    state.falling.drop(40);
+    createGoldenBurst();
+    createBlessingBanner(amount);
+    createRedEnvelopeRain(25);
+    createFortuneCharShower(20);
+    createSparkleRing(3);
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => createFloatingBlessing(amount), i * 400);
+    }
+    setTimeout(() => createDragonEffect(), 500);
+    // 持續煙火
+    let burstCount = 0;
+    const sustainedFireworks = setInterval(() => {
+      state.fireworks.burst(2);
+      burstCount++;
+      if (burstCount >= 5) {
+        clearInterval(sustainedFireworks);
+        setTimeout(() => { if (state.fireworks.particles.length === 0) state.fireworks.stop(); }, 3000);
+      }
+    }, 1200);
+  } else if (amount >= 1000) {
+    // 💴 大額奉獻 — 金光四射
+    state.fireworks.start();
+    state.fireworks.burst(5);
+    state.falling.drop(25);
+    createGoldenBurst();
+    createRedEnvelopeRain(15);
+    createFortuneCharShower(12);
+    createSparkleRing(2);
+    createBlessingBanner(amount);
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => createFloatingBlessing(amount), i * 500);
+    }
     setTimeout(() => {
-      if (state.fireworks.particles.length === 0) state.fireworks.stop();
-    }, 4000);
+      state.fireworks.burst(3);
+      setTimeout(() => { if (state.fireworks.particles.length === 0) state.fireworks.stop(); }, 3000);
+    }, 2000);
   } else if (amount >= 100) {
-    state.falling.drop(10);
+    // 💵 中等奉獻 — 紅包雨 + 光環
+    state.falling.drop(12);
+    createRedEnvelopeRain(8);
+    createSparkleRing(1);
+    createFloatingBlessing(amount);
+    createBlessingBanner(amount);
+    state.fireworks.start();
+    state.fireworks.burst(2);
+    setTimeout(() => { if (state.fireworks.particles.length === 0) state.fireworks.stop(); }, 3000);
   } else {
-    state.falling.drop(3);
+    // 🪙 小額但心到 — 基本特效
+    state.falling.drop(5);
+    createFloatingBlessing(amount);
+    createSparkleRing(1);
   }
+}
+
+// ===== 過年走春視覺特效系統 =====
+
+/** 漂浮祝福文字 */
+function createFloatingBlessing(amount) {
+  const blessTexts = amount >= 5000
+    ? ['🐉 龍年大吉', '🏆 功德無量', '🎊 紫氣東來', '🌟 鴻運當頭', '💎 福報萬倍']
+    : amount >= 1000
+    ? ['🧧 恭喜發財', '✨ 萬事如意', '🎆 好運旺來', '🎊 闔家安康']
+    : amount >= 100
+    ? ['🙏 善心感天', '💫 福報綿延', '🪷 菩薩保佑']
+    : ['🙏 心意到了', '🌸 誠心最重要', '✨ 積善成德'];
+
+  const text = blessTexts[Math.floor(Math.random() * blessTexts.length)];
+  const el = document.createElement('div');
+  el.className = 'floating-blessing';
+  el.textContent = text;
+  const size = amount >= 5000 ? 2 : amount >= 1000 ? 1.6 : 1.2;
+  el.style.fontSize = size + 'rem';
+  el.style.left = (15 + Math.random() * 70) + '%';
+  el.style.top = (40 + Math.random() * 30) + '%';
+  document.body.appendChild(el);
+  el.addEventListener('animationend', () => el.remove());
+}
+
+/** 紅包雨 */
+function createRedEnvelopeRain(count) {
+  const envelopes = ['🧧', '🧧', '🧧', '💰', '🪙', '💵'];
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'red-envelope';
+      el.textContent = envelopes[Math.floor(Math.random() * envelopes.length)];
+      el.style.left = (Math.random() * 95) + '%';
+      el.style.top = '-60px';
+      el.style.animationDuration = (2.5 + Math.random() * 2) + 's';
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }, i * 150);
+  }
+}
+
+/** 金光爆發 */
+function createGoldenBurst() {
+  const burst = document.createElement('div');
+  burst.className = 'golden-burst';
+  document.body.appendChild(burst);
+  burst.addEventListener('animationend', () => burst.remove());
+}
+
+/** 吉祥字飄落 */
+function createFortuneCharShower(count) {
+  const chars = ['福', '祿', '壽', '喜', '財', '吉', '旺', '發', '春', '安'];
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'fortune-char';
+      el.textContent = chars[Math.floor(Math.random() * chars.length)];
+      el.style.left = (5 + Math.random() * 90) + '%';
+      el.style.bottom = '0';
+      el.style.fontSize = (1.2 + Math.random() * 2) + 'rem';
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }, i * 200);
+  }
+}
+
+/** 龍飛特效 (超級大額專屬) */
+function createDragonEffect() {
+  const dragon = document.createElement('div');
+  dragon.className = 'dragon-effect';
+  dragon.textContent = '🐉';
+  dragon.style.top = (30 + Math.random() * 30) + '%';
+  document.body.appendChild(dragon);
+  dragon.addEventListener('animationend', () => dragon.remove());
+  // 第二條龍反向飛
+  setTimeout(() => {
+    const dragon2 = document.createElement('div');
+    dragon2.className = 'dragon-effect';
+    dragon2.textContent = '🐲';
+    dragon2.style.top = (20 + Math.random() * 40) + '%';
+    dragon2.style.animationDirection = 'reverse';
+    document.body.appendChild(dragon2);
+    dragon2.addEventListener('animationend', () => dragon2.remove());
+  }, 800);
+}
+
+/** 光環擴散 */
+function createSparkleRing(count) {
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const ring = document.createElement('div');
+      ring.className = 'sparkle-ring';
+      document.body.appendChild(ring);
+      ring.addEventListener('animationend', () => ring.remove());
+    }, i * 500);
+  }
+}
+
+/** 頂部祝福橫幅 */
+function createBlessingBanner(amount) {
+  const msgs = amount >= 5000
+    ? ['🐉 恭賀大功德主 · 龍年行大運 · 福壽綿長 🐉', '🏆 功德圓滿 · 神明庇佑 · 鴻運當頭 🏆']
+    : amount >= 1000
+    ? ['🧧 虔誠奉獻 · 闔家安康 · 萬事如意 🧧', '✨ 添油香火旺 · 好運年年來 ✨']
+    : ['🙏 善心感天 · 福報綿延 🙏', '🌸 心誠則靈 · 吉祥如意 🌸'];
+  const msg = msgs[Math.floor(Math.random() * msgs.length)];
+  const banner = document.createElement('div');
+  banner.className = 'blessing-banner';
+  banner.textContent = msg;
+  document.body.appendChild(banner);
+  banner.addEventListener('animationend', () => banner.remove());
 }
 
 function animateCoinDrop(amount) {
