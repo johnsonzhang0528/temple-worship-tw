@@ -5,6 +5,8 @@
 // ===== State =====
 const state = {
   visited: new Set(JSON.parse(localStorage.getItem('visited') || '[]')),
+  donations: JSON.parse(localStorage.getItem('donations') || '{}'),  // { templeId: amount }
+  totalDonation: parseInt(localStorage.getItem('totalDonation') || '0'),
   currentTemple: null,
   worshipStep: 0, // 0: none, 1: incense, 2: jiaobei, 3: fortune
   fireworks: null,
@@ -13,6 +15,8 @@ const state = {
 
 function saveState() {
   localStorage.setItem('visited', JSON.stringify([...state.visited]));
+  localStorage.setItem('donations', JSON.stringify(state.donations));
+  localStorage.setItem('totalDonation', state.totalDonation.toString());
 }
 
 // ===== DOM Ready =====
@@ -21,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderTemples();
   renderStamps();
   updateProgress();
+  updateDonationDisplay();
   bindEvents();
 
   // Hide loading screen
@@ -149,12 +154,15 @@ function bindEvents() {
 
   // Reset button
   document.getElementById('resetBtn')?.addEventListener('click', () => {
-    if (confirm('確定要重新開始走春之旅嗎？所有集章紀錄將會清除。')) {
+    if (confirm('確定要重新開始走春之旅嗎？所有集章紀錄與香油錢將會清除。')) {
       state.visited.clear();
+      state.donations = {};
+      state.totalDonation = 0;
       saveState();
       renderTemples();
       renderStamps();
       updateProgress();
+      updateDonationDisplay();
     }
   });
 
@@ -225,6 +233,7 @@ function resetWorshipArea() {
   document.getElementById('btnIncense').onclick = doIncense;
   document.getElementById('btnJiaoBei').onclick = doJiaoBei;
   document.getElementById('btnFortune').onclick = doFortune;
+  document.getElementById('btnDonation').onclick = doDonation;
 }
 
 async function doIncense() {
@@ -421,6 +430,142 @@ async function doFortune() {
       state.falling.drop(8);
     }
   }, 2500);
+}
+
+// ===== Donation (香油錢) =====
+function doDonation() {
+  const stepArea = document.getElementById('stepArea');
+  const temple = state.currentTemple;
+  const prevDonation = state.donations[temple.id] || 0;
+
+  stepArea.innerHTML = '';
+  const donationUI = document.createElement('div');
+  donationUI.className = 'donation-area fade-in';
+  donationUI.innerHTML = `
+    <div class="donation-box">
+      <div class="donation-box-icon">🏺</div>
+      <div class="donation-box-label">功德箱</div>
+      <div class="coin-landing-zone" id="coinLandingZone"></div>
+    </div>
+    <p class="donation-temple-total">本廟已添香油錢：<span class="gold-text" id="templeDonationAmt">${prevDonation.toLocaleString()}</span> 元</p>
+    <p class="donation-prompt">選擇金額，誠心添香油：</p>
+    <div class="donation-amounts">
+      <button class="donation-amt-btn" data-amt="10">🪙 10 元</button>
+      <button class="donation-amt-btn" data-amt="50">🪙 50 元</button>
+      <button class="donation-amt-btn" data-amt="100">💵 100 元</button>
+      <button class="donation-amt-btn" data-amt="500">💵 500 元</button>
+      <button class="donation-amt-btn" data-amt="1000">💴 1,000 元</button>
+      <button class="donation-amt-btn" data-amt="5000">💎 5,000 元</button>
+    </div>
+    <div class="donation-custom">
+      <input type="number" id="customDonationAmt" class="donation-input" placeholder="自訂金額" min="1" max="999999">
+      <button class="worship-btn donation-custom-btn" id="customDonationBtn">💰 投入</button>
+    </div>
+    <div class="donation-bless-msg" id="donationBlessMsg"></div>
+  `;
+  stepArea.appendChild(donationUI);
+
+  // Bind amount buttons
+  donationUI.querySelectorAll('.donation-amt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const amt = parseInt(btn.dataset.amt);
+      processDonation(amt);
+    });
+  });
+
+  // Custom amount
+  document.getElementById('customDonationBtn').addEventListener('click', () => {
+    const input = document.getElementById('customDonationAmt');
+    const amt = parseInt(input.value);
+    if (amt > 0 && amt <= 999999) {
+      processDonation(amt);
+      input.value = '';
+    }
+  });
+
+  document.getElementById('customDonationAmt').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('customDonationBtn').click();
+  });
+}
+
+function processDonation(amount) {
+  const temple = state.currentTemple;
+  if (!temple) return;
+
+  // Update state
+  state.donations[temple.id] = (state.donations[temple.id] || 0) + amount;
+  state.totalDonation += amount;
+  saveState();
+
+  // Coin drop animation
+  animateCoinDrop(amount);
+
+  // Update display
+  const templeDonationEl = document.getElementById('templeDonationAmt');
+  if (templeDonationEl) {
+    templeDonationEl.textContent = state.donations[temple.id].toLocaleString();
+    templeDonationEl.classList.add('amount-bump');
+    setTimeout(() => templeDonationEl.classList.remove('amount-bump'), 400);
+  }
+  updateDonationDisplay();
+
+  // Blessing message
+  showDonationBlessing(amount);
+
+  // Effects based on amount
+  if (amount >= 1000) {
+    state.fireworks.start();
+    state.fireworks.burst(4);
+    state.falling.drop(20);
+    setTimeout(() => {
+      if (state.fireworks.particles.length === 0) state.fireworks.stop();
+    }, 4000);
+  } else if (amount >= 100) {
+    state.falling.drop(10);
+  } else {
+    state.falling.drop(3);
+  }
+}
+
+function animateCoinDrop(amount) {
+  const zone = document.getElementById('coinLandingZone');
+  if (!zone) return;
+  const coinCount = Math.min(Math.ceil(amount / 50), 12);
+  const coinEmoji = amount >= 1000 ? '💴' : amount >= 100 ? '💵' : '🪙';
+
+  for (let i = 0; i < coinCount; i++) {
+    setTimeout(() => {
+      const coin = document.createElement('div');
+      coin.className = 'coin-drop';
+      coin.textContent = coinEmoji;
+      coin.style.left = (20 + Math.random() * 60) + '%';
+      coin.style.animationDuration = (0.6 + Math.random() * 0.4) + 's';
+      zone.appendChild(coin);
+      coin.addEventListener('animationend', () => coin.remove());
+    }, i * 100);
+  }
+}
+
+function showDonationBlessing(amount) {
+  const msgEl = document.getElementById('donationBlessMsg');
+  if (!msgEl) return;
+
+  const blessings = amount >= 5000
+    ? ['🎊 大功德主！神明必定厚賜福報！', '🏆 慷慨解囊，功德無量！福報萬倍！', '🌟 至誠至善，天地同感！紫氣東來！']
+    : amount >= 1000
+    ? ['🧧 虔誠奉獻，神明保佑闔家安康！', '✨ 福慧雙修，來年必定鴻運當頭！', '🎆 添油香火旺，好運旺旺來！']
+    : amount >= 100
+    ? ['🙏 善心感天，福報綿延！', '🪷 心誠意善，菩薩保佑！', '💫 添一分香油，積一分功德！']
+    : ['🙏 心意到了，神明感受得到！', '✨ 積小善成大德，福報不請自來！', '🌸 誠心最重要，金額大小都是福！'];
+
+  const msg = blessings[Math.floor(Math.random() * blessings.length)];
+  msgEl.textContent = msg;
+  msgEl.className = 'donation-bless-msg fade-in';
+}
+
+function updateDonationDisplay() {
+  const el = document.getElementById('totalDonationAmt');
+  if (el) el.textContent = state.totalDonation.toLocaleString();
 }
 
 // ===== Celebration =====
