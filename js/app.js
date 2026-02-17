@@ -753,203 +753,430 @@ function createBlessingBanner(amount) {
   banner.addEventListener('animationend', () => banner.remove());
 }
 
-/** 主神主題特效 — 根據 deityCategory 顯示不同主題的滿屏吸睛特效 */
+/** ====== Q版主神全屏神像 + 鞭炮特效系統 ====== */
+
+/* hex → rgba helper */
+function _hr(hex, a) {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+}
+
+/* 主神視覺設定 (name, title, robeTop, robeBtm, haloColor, hat, hatC1, hatC2, eyes, heldL, heldR, decor[], themeColor) */
+const DEITY_PROFILES = {
+  mazu:         { n:'天上聖母 媽祖',       t:'🌊 海不揚波 · 慈航普度 🌊',       rt:'#0066CC', rb:'#003399', hc:'#4fc3f7', hat:'phoenix',  h1:'#FFD700', h2:'#FF6D00', ey:'gentle',  hL:'📿', hR:'🌊', dk:['🌊','⛵','🐚','🌅','☁️'],  tc:'#4fc3f7'  },
+  guanyin:      { n:'大慈大悲 觀世音菩薩',  t:'🪷 慈悲為懷 · 聞聲救苦 🪷',       rt:'#FFFFFF', rb:'#F0E0FF', hc:'#FFB6C1', hat:'lotus',    h1:'#FFD700', h2:'#FFF',    ey:'gentle',  hL:'🪷', hR:'💧', dk:['🪷','☁️','✨','🌸','🕊️'], tc:'#FFCCE5' },
+  guandi:       { n:'關聖帝君',             t:'⚔️ 義薄雲天 · 忠義千秋 ⚔️',       rt:'#228B22', rb:'#006400', hc:'#FF4444', hat:'warrior',  h1:'#FFD700', h2:'#FF0000', ey:'fierce',  hL:'📖', hR:'🗡️', dk:['⚔️','🐴','🛡️','🔥','🏴'], tc:'#FF4444' },
+  buddha:       { n:'釋迦牟尼佛',           t:'☸️ 佛光普照 · 般若智慧 ☸️',        rt:'#FF8C00', rb:'#B8860B', hc:'#FFD700', hat:'ushnisha', h1:'#4169E1', h2:'#FFD700', ey:'wise',    hL:'🪷', hR:'☸️', dk:['☸️','🪷','✨','🙏','💛'],  tc:'#FFD700' },
+  wangye:       { n:'代天巡狩 王爺',        t:'🔥 代天巡狩 · 驅瘟逐疫 🔥',       rt:'#FF6600', rb:'#CC3300', hc:'#FF6600', hat:'official', h1:'#1A1A1A', h2:'#FFD700', ey:'fierce',  hL:'📜', hR:'⚡', dk:['🔥','⛵','🧨','🏮','⚡'],  tc:'#FF6600' },
+  chenghuang:   { n:'城隍爺',               t:'⚖️ 賞善罰惡 · 護國佑民 ⚖️',       rt:'#4B0082', rb:'#2E0854', hc:'#BB86FC', hat:'official', h1:'#1A1A1A', h2:'#FFD700', ey:'fierce',  hL:'📜', hR:'⚖️', dk:['⚖️','👁️','🏛️','🔔','📜'], tc:'#BB86FC' },
+  confucius:    { n:'至聖先師 孔子',        t:'📚 有教無類 · 誨人不倦 📚',        rt:'#1565C0', rb:'#0D47A1', hc:'#64B5F6', hat:'scholar',  h1:'#1A1A1A', h2:'#1565C0', ey:'wise',    hL:'📚', hR:'🖊️', dk:['📚','🎓','📜','🎋','✨'], tc:'#64B5F6' },
+  earth:        { n:'福德正神 土地公',       t:'💰 招財進寶 · 五穀豐登 💰',        rt:'#DAA520', rb:'#B8860B', hc:'#DAA520', hat:'round',    h1:'#1A1A1A', h2:'#FFD700', ey:'kind',    hL:'🪙', hR:'🏡', dk:['💰','🪙','🌾','🏡','🌳'], tc:'#DAA520' },
+  daoist:       { n:'呂洞賓仙師',           t:'☯️ 道法自然 · 清靜無為 ☯️',        rt:'#87CEEB', rb:'#4682B4', hc:'#90CAF9', hat:'topknot', h1:'#333',    h2:'#87CEEB', ey:'wise',    hL:'🍑', hR:'⚔️', dk:['☯️','🌙','⛰️','🍑','✨'], tc:'#90CAF9' },
+  baosheng:     { n:'保生大帝',             t:'🌿 醫神庇佑 · 身體安康 🌿',        rt:'#4CAF50', rb:'#2E7D32', hc:'#66BB6A', hat:'official', h1:'#1A1A1A', h2:'#FFD700', ey:'gentle',  hL:'🌿', hR:'💊', dk:['💊','🌿','☘️','💚','🍃'], tc:'#66BB6A' },
+  jade_emperor: { n:'天公 玉皇大帝',        t:'👑 統御萬靈 · 恩澤蒼生 👑',        rt:'#FFD700', rb:'#DAA520', hc:'#FFD700', hat:'emperor',  h1:'#FFD700', h2:'#FF0000', ey:'fierce',  hL:'🌟', hR:'⚡', dk:['👑','☁️','🌩️','⚡','🌟'], tc:'#FFD700' },
+  nezha:        { n:'三太子 哪吒',          t:'🔥 風火少年 · 驅邪鎮煞 🔥',        rt:'#FF5722', rb:'#D84315', hc:'#FF5722', hat:'buns',     h1:'#FF0000', h2:'#FFD700', ey:'playful', hL:'🛞', hR:'🔥', dk:['🔥','💨','🏮','🛞','⚡'], tc:'#FF5722' },
+  yaochi:       { n:'瑤池金母',             t:'🍑 仙桃壽宴 · 母娘慈恩 🍑',        rt:'#CE93D8', rb:'#9C27B0', hc:'#CE93D8', hat:'phoenix',  h1:'#FFD700', h2:'#CE93D8', ey:'gentle',  hL:'🍑', hR:'🌸', dk:['🍑','👸','🌸','🦚','🌺'], tc:'#CE93D8' },
+  yimin:        { n:'義民爺',               t:'🏴 忠勇護鄉 · 義民千秋 🏴',        rt:'#BF360C', rb:'#8B0000', hc:'#EF5350', hat:'warrior',  h1:'#1A1A1A', h2:'#FF0000', ey:'fierce',  hL:'🏴', hR:'⚔️', dk:['🏴','⚔️','🐂','🏮','🔥'], tc:'#EF5350' },
+  zushi:        { n:'清水祖師',             t:'⛰️ 落鼻祖師 · 除煞鎮邪 ⛰️',       rt:'#455A64', rb:'#263238', hc:'#4DD0E1', hat:'monk',     h1:'#795548', h2:'#5D4037', ey:'wise',    hL:'🌧️', hR:'📿', dk:['🌧️','⛰️','☁️','🌊','🏯'], tc:'#4DD0E1' },
+};
+
 function createDeityThemedEffect(temple) {
+  createDeityPortraitOverlay(temple);
+  createFirecrackerBurst();
+}
+
+/** 全屏Q版主神畫像疊層 */
+function createDeityPortraitOverlay(temple) {
   const cat = temple.deityCategory || 'other';
-  const themes = {
-    mazu: {
-      name: '媽祖',
-      emojis: ['🌊', '⛵', '🧜‍♀️', '🌅', '🐚', '🪸'],
-      chars: ['媽', '祖', '慈', '航', '海', '佑'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(0,100,200,0.25), rgba(255,215,0,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(0,150,255,0.3), rgba(255,215,0,0.1), transparent 60%)',
-      color: '#4fc3f7',
-      title: '🌊 媽祖庇佑 · 海不揚波 · 天上聖母賜福 🌊'
-    },
-    guanyin: {
-      name: '觀音',
-      emojis: ['🪷', '☁️', '✨', '🌸', '💮', '🕊️'],
-      chars: ['慈', '悲', '觀', '音', '蓮', '淨'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(255,255,255,0.2), rgba(255,182,193,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(255,255,255,0.3), rgba(255,192,203,0.1), transparent 60%)',
-      color: '#fff0f5',
-      title: '🪷 觀音慈悲 · 蓮花淨土 · 大慈大悲觀世音 🪷'
-    },
-    guandi: {
-      name: '關帝',
-      emojis: ['⚔️', '🗡️', '🐴', '🏴', '🔥', '🛡️'],
-      chars: ['忠', '義', '關', '帝', '武', '勇'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(200,0,0,0.25), rgba(255,215,0,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(220,20,20,0.3), rgba(255,165,0,0.1), transparent 60%)',
-      color: '#ff4444',
-      title: '⚔️ 關聖帝君 · 義薄雲天 · 武聖護國 ⚔️'
-    },
-    buddha: {
-      name: '佛祖',
-      emojis: ['🪷', '☸️', '🙏', '✨', '🌟', '💛'],
-      chars: ['佛', '光', '般', '若', '禪', '定'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(255,215,0,0.3), rgba(255,255,255,0.1), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(255,215,0,0.35), rgba(255,200,0,0.1), transparent 60%)',
-      color: '#ffd700',
-      title: '☸️ 佛光普照 · 般若智慧 · 功德圓滿 ☸️'
-    },
-    wangye: {
-      name: '王爺',
-      emojis: ['🔥', '⛵', '🎏', '🏮', '🧨', '⚡'],
-      chars: ['王', '爺', '代', '天', '巡', '狩'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(255,100,0,0.25), rgba(255,0,0,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(255,120,0,0.3), rgba(255,50,0,0.1), transparent 60%)',
-      color: '#ff6600',
-      title: '🔥 代天巡狩 · 王爺駕到 · 鑑察善惡 🔥'
-    },
-    chenghuang: {
-      name: '城隍',
-      emojis: ['⚖️', '👁️', '🏛️', '📜', '🔔', '🌙'],
-      chars: ['城', '隍', '鑑', '察', '善', '惡'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(100,0,150,0.2), rgba(255,215,0,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(128,0,128,0.25), rgba(255,215,0,0.1), transparent 60%)',
-      color: '#bb86fc',
-      title: '⚖️ 城隍鑑察 · 善惡分明 · 護國佑民 ⚖️'
-    },
-    confucius: {
-      name: '孔子',
-      emojis: ['📚', '🎓', '📜', '🖊️', '🏫', '🎋'],
-      chars: ['仁', '義', '禮', '智', '信', '學'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(0,80,180,0.2), rgba(255,215,0,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(30,100,200,0.25), rgba(255,215,0,0.1), transparent 60%)',
-      color: '#64b5f6',
-      title: '📚 至聖先師 · 有教無類 · 文運昌隆 📚'
-    },
-    earth: {
-      name: '土地公',
-      emojis: ['💰', '🪙', '🌾', '🏡', '🌳', '🎋'],
-      chars: ['福', '德', '財', '旺', '土', '地'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(200,150,50,0.25), rgba(0,128,0,0.1), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(200,170,50,0.3), rgba(100,200,50,0.1), transparent 60%)',
-      color: '#daa520',
-      title: '💰 土地公福德正神 · 招財進寶 · 五穀豐登 💰'
-    },
-    daoist: {
-      name: '道教神仙',
-      emojis: ['☯️', '🌙', '⛰️', '🍑', '🏔️', '✨'],
-      chars: ['道', '仙', '清', '靜', '無', '為'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(0,50,100,0.2), rgba(200,200,255,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(100,150,255,0.25), rgba(200,200,255,0.1), transparent 60%)',
-      color: '#90caf9',
-      title: '☯️ 道法自然 · 清靜無為 · 仙風道骨 ☯️'
-    },
-    baosheng: {
-      name: '保生大帝',
-      emojis: ['💊', '🏥', '🌿', '💚', '☘️', '🍃'],
-      chars: ['保', '生', '醫', '神', '康', '健'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(0,150,80,0.2), rgba(255,255,255,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(0,180,100,0.25), rgba(200,255,200,0.1), transparent 60%)',
-      color: '#66bb6a',
-      title: '🌿 保生大帝 · 醫神庇佑 · 身體安康 🌿'
-    },
-    jade_emperor: {
-      name: '玉皇大帝',
-      emojis: ['👑', '☁️', '🌩️', '⚡', '🌟', '🏯'],
-      chars: ['天', '公', '玉', '皇', '至', '尊'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(255,215,0,0.35), rgba(255,255,255,0.2), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(255,215,0,0.4), rgba(255,255,255,0.15), transparent 60%)',
-      color: '#ffd700',
-      title: '👑 天公玉皇至尊 · 統御萬靈 · 恩澤蒼生 👑'
-    },
-    nezha: {
-      name: '哪吒',
-      emojis: ['🔥', '💨', '🏮', '🛞', '⚡', '🌀'],
-      chars: ['哪', '吒', '風', '火', '輪', '勇'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(255,50,0,0.25), rgba(255,200,0,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(255,100,0,0.3), rgba(255,200,50,0.1), transparent 60%)',
-      color: '#ff5722',
-      title: '🔥 三太子哪吒 · 風火少年 · 驅邪鎮煞 🔥'
-    },
-    yaochi: {
-      name: '瑤池金母',
-      emojis: ['🍑', '👸', '🌸', '🦚', '🌺', '💜'],
-      chars: ['瑤', '池', '金', '母', '仙', '桃'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(200,100,255,0.2), rgba(255,192,203,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(200,100,255,0.25), rgba(255,182,193,0.1), transparent 60%)',
-      color: '#ce93d8',
-      title: '🍑 瑤池金母 · 仙桃壽宴 · 母娘慈恩 🍑'
-    },
-    yimin: {
-      name: '義民爺',
-      emojis: ['🏴', '⚔️', '🐂', '🏮', '🎏', '🔥'],
-      chars: ['義', '民', '忠', '勇', '護', '鄉'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(100,0,0,0.2), rgba(255,200,0,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(150,20,20,0.25), rgba(255,165,0,0.1), transparent 60%)',
-      color: '#ef5350',
-      title: '🏴 義民忠魂 · 護鄉保土 · 忠勇可嘉 🏴'
-    },
-    zushi: {
-      name: '清水祖師',
-      emojis: ['🌧️', '⛰️', '☁️', '🌊', '🐍', '🏯'],
-      chars: ['祖', '師', '清', '水', '落', '鼻'],
-      overlayBg: 'radial-gradient(ellipse at center, rgba(0,100,150,0.2), rgba(200,200,200,0.15), transparent 70%)',
-      waveBg: 'radial-gradient(circle, rgba(50,150,200,0.25), rgba(200,220,255,0.1), transparent 60%)',
-      color: '#4dd0e1',
-      title: '⛰️ 清水祖師 · 落鼻祖師 · 除煞鎮邪 ⛰️'
-    }
-  };
+  const d = DEITY_PROFILES[cat] || DEITY_PROFILES.mazu;
 
-  const theme = themes[cat] || themes.mazu;
+  // Container
+  const wrap = document.createElement('div');
+  wrap.className = 'deity-portrait-wrap';
 
-  // 1. Radial overlay pulse
-  const overlay = document.createElement('div');
-  overlay.className = 'deity-mega-overlay';
-  overlay.style.background = theme.overlayBg;
-  document.body.appendChild(overlay);
-  overlay.addEventListener('animationend', () => overlay.remove());
+  // Canvas
+  const dpr = window.devicePixelRatio || 1;
+  const W = Math.min(380, window.innerWidth * 0.75);
+  const H = W * 1.35;
+  const cvs = document.createElement('canvas');
+  cvs.width = W * dpr;
+  cvs.height = H * dpr;
+  cvs.style.width = W + 'px';
+  cvs.style.height = H + 'px';
+  cvs.className = 'deity-portrait-canvas';
+  const ctx = cvs.getContext('2d');
+  ctx.scale(dpr, dpr);
+  _drawQDeity(ctx, W, H, d);
 
-  // 2. Expanding wave
-  const wave = document.createElement('div');
-  wave.className = 'deity-mega-wave';
-  wave.style.background = theme.waveBg;
-  document.body.appendChild(wave);
-  wave.addEventListener('animationend', () => wave.remove());
+  // Name
+  const nameEl = document.createElement('div');
+  nameEl.className = 'deity-portrait-name';
+  nameEl.textContent = d.n;
+  nameEl.style.color = d.tc;
+  nameEl.style.textShadow = `0 0 20px ${d.tc}, 0 0 40px ${d.tc}`;
 
-  // 3. Themed emoji shower (staggered, from all directions)
-  for (let i = 0; i < 20; i++) {
+  // Title
+  const titleEl = document.createElement('div');
+  titleEl.className = 'deity-portrait-title';
+  titleEl.textContent = d.t;
+  titleEl.style.color = d.tc;
+
+  wrap.appendChild(cvs);
+  wrap.appendChild(nameEl);
+  wrap.appendChild(titleEl);
+  document.body.appendChild(wrap);
+
+  // Floating themed emojis
+  for (let i = 0; i < 18; i++) {
     setTimeout(() => {
       const el = document.createElement('div');
-      el.className = 'deity-mega-char';
-      el.textContent = theme.emojis[Math.floor(Math.random() * theme.emojis.length)];
+      el.className = 'deity-float-emoji';
+      el.textContent = d.dk[Math.floor(Math.random() * d.dk.length)];
       el.style.left = (5 + Math.random() * 90) + '%';
-      el.style.top = (10 + Math.random() * 70) + '%';
-      el.style.color = theme.color;
-      el.style.fontSize = (2.5 + Math.random() * 3) + 'rem';
-      document.body.appendChild(el);
+      el.style.top = (5 + Math.random() * 85) + '%';
+      el.style.fontSize = (2 + Math.random() * 3.5) + 'rem';
+      wrap.appendChild(el);
       el.addEventListener('animationend', () => el.remove());
-    }, i * 150);
+    }, i * 180);
   }
 
-  // 4. Themed character rain (deity-specific Chinese chars)
-  for (let i = 0; i < 12; i++) {
+  // Auto-remove
+  setTimeout(() => {
+    wrap.classList.add('fading');
+    setTimeout(() => wrap.remove(), 1000);
+  }, 5200);
+}
+
+/** Canvas 繪製 Q版主神 */
+function _drawQDeity(ctx, w, h, d) {
+  const cx = w / 2;
+  const headR = w * 0.19;
+  const headY = h * 0.36;
+  const bodyTop = headY + headR * 0.92;
+  const bodyH = headR * 1.6;
+  const bodyW = headR * 1.5;
+
+  // ── 1. 光背 (Mandorla) ──
+  for (let r = headR * 4.5; r > headR; r -= headR * 0.5) {
+    const a = 0.04 + (1 - r / (headR * 4.5)) * 0.1;
+    const g = ctx.createRadialGradient(cx, headY + headR * 0.2, 0, cx, headY + headR * 0.2, r);
+    g.addColorStop(0, _hr(d.hc, a));
+    g.addColorStop(0.6, _hr(d.hc, a * 0.3));
+    g.addColorStop(1, 'transparent');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.ellipse(cx, headY + headR * 0.2, r, r * 1.15, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  // Light rays
+  ctx.save();
+  ctx.translate(cx, headY + headR * 0.2);
+  for (let a = 0; a < Math.PI * 2; a += Math.PI / 10) {
+    ctx.save();
+    ctx.rotate(a);
+    ctx.fillStyle = _hr(d.hc, 0.07);
+    ctx.beginPath();
+    ctx.moveTo(-2, 0); ctx.lineTo(-5, -headR * 3.5); ctx.lineTo(5, -headR * 3.5); ctx.lineTo(2, 0);
+    ctx.fill();
+    ctx.restore();
+  }
+  ctx.restore();
+
+  // ── 2. 身體 (Robe) ──
+  const rg = ctx.createLinearGradient(cx, bodyTop, cx, bodyTop + bodyH);
+  rg.addColorStop(0, d.rt); rg.addColorStop(1, d.rb);
+  ctx.fillStyle = rg;
+  ctx.beginPath();
+  ctx.moveTo(cx - headR * 0.5, bodyTop);
+  ctx.quadraticCurveTo(cx - bodyW * 0.65, bodyTop + bodyH * 0.5, cx - bodyW * 0.55, bodyTop + bodyH);
+  ctx.lineTo(cx + bodyW * 0.55, bodyTop + bodyH);
+  ctx.quadraticCurveTo(cx + bodyW * 0.65, bodyTop + bodyH * 0.5, cx + headR * 0.5, bodyTop);
+  ctx.closePath();
+  ctx.fill();
+  // Center seam
+  ctx.strokeStyle = _hr(d.h1, 0.4);
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(cx, bodyTop + 5); ctx.lineTo(cx, bodyTop + bodyH - 5); ctx.stroke();
+  // Collar
+  ctx.strokeStyle = d.h1;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(cx - headR * 0.35, bodyTop + 2);
+  ctx.lineTo(cx, bodyTop + headR * 0.5);
+  ctx.lineTo(cx + headR * 0.35, bodyTop + 2);
+  ctx.stroke();
+
+  // ── 3. 袖子 + 持物 ──
+  const slvY = bodyTop + bodyH * 0.28;
+  const slvR = headR * 0.38;
+  ctx.fillStyle = d.rt;
+  // Left sleeve
+  ctx.beginPath();
+  ctx.ellipse(cx - bodyW * 0.5, slvY, slvR, slvR * 0.65, -0.3, 0, Math.PI * 2);
+  ctx.fill();
+  // Right sleeve
+  ctx.beginPath();
+  ctx.ellipse(cx + bodyW * 0.5, slvY, slvR, slvR * 0.65, 0.3, 0, Math.PI * 2);
+  ctx.fill();
+  // Held items (emoji)
+  ctx.font = `${headR * 0.55}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(d.hL, cx - bodyW * 0.6, slvY + slvR * 0.6);
+  ctx.fillText(d.hR, cx + bodyW * 0.6, slvY + slvR * 0.6);
+
+  // ── 4. 頭部 ──
+  const sg = ctx.createRadialGradient(cx - headR * 0.1, headY - headR * 0.1, 0, cx, headY, headR);
+  sg.addColorStop(0, '#FFECCC'); sg.addColorStop(1, '#FDDCB5');
+  ctx.fillStyle = sg;
+  ctx.beginPath();
+  ctx.arc(cx, headY, headR, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#D4A574';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // ── 5. 臉部 ──
+  _drawDeityFace(ctx, cx, headY, headR, d.ey);
+
+  // ── 6. 帽子/冠 ──
+  _drawDeityHat(ctx, cx, headY, headR, d.hat, d.h1, d.h2);
+}
+
+/** 臉部繪製 */
+function _drawDeityFace(ctx, cx, cy, r, eyeStyle) {
+  const eY = cy - r * 0.03;
+  const eS = r * 0.36;
+  const eR = r * 0.13;
+
+  if (eyeStyle === 'gentle' || eyeStyle === 'kind') {
+    // Soft curved happy eyes ◠
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    [-1, 1].forEach(s => {
+      ctx.beginPath();
+      ctx.arc(cx + s * eS, eY, eR, Math.PI * 0.15, Math.PI * 0.85);
+      ctx.stroke();
+    });
+  } else if (eyeStyle === 'fierce') {
+    // Sharp warrior eyes with angled brows
+    [-1, 1].forEach(s => {
+      const ex = cx + s * eS;
+      ctx.fillStyle = '#FFF';
+      ctx.beginPath();
+      ctx.ellipse(ex, eY, eR * 1.2, eR * 0.85, s * -0.1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#1A0A00';
+      ctx.beginPath();
+      ctx.arc(ex, eY, eR * 0.55, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#FFF';
+      ctx.beginPath();
+      ctx.arc(ex + eR * 0.25, eY - eR * 0.25, eR * 0.2, 0, Math.PI * 2);
+      ctx.fill();
+      // Eyebrow
+      ctx.strokeStyle = '#333';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(ex - eR * 1.2, eY - eR * 1.4 + s * eR * 0.4);
+      ctx.lineTo(ex + eR * 1.2, eY - eR * 1.4 - s * eR * 0.4);
+      ctx.stroke();
+    });
+  } else if (eyeStyle === 'wise') {
+    // Half-lid serene eyes
+    [-1, 1].forEach(s => {
+      const ex = cx + s * eS;
+      ctx.strokeStyle = '#333';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(ex - eR, eY); ctx.quadraticCurveTo(ex, eY - eR * 0.5, ex + eR, eY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ex - eR, eY); ctx.quadraticCurveTo(ex, eY + eR * 0.35, ex + eR, eY); ctx.stroke();
+      ctx.fillStyle = '#1A0A00';
+      ctx.beginPath(); ctx.arc(ex, eY + eR * 0.05, eR * 0.3, 0, Math.PI * 2); ctx.fill();
+    });
+  } else { // playful — big sparkly eyes
+    [-1, 1].forEach(s => {
+      const ex = cx + s * eS;
+      ctx.fillStyle = '#FFF';
+      ctx.beginPath(); ctx.arc(ex, eY, eR * 1.3, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#1A1A1A';
+      ctx.beginPath(); ctx.arc(ex, eY + eR * 0.1, eR * 0.8, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#FFF';
+      ctx.beginPath(); ctx.arc(ex + eR * 0.3, eY - eR * 0.2, eR * 0.35, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(ex - eR * 0.2, eY + eR * 0.3, eR * 0.15, 0, Math.PI * 2); ctx.fill();
+    });
+  }
+
+  // 腮紅
+  ctx.fillStyle = 'rgba(255,150,150,0.3)';
+  [-1, 1].forEach(s => {
+    ctx.beginPath();
+    ctx.ellipse(cx + s * eS * 1.2, eY + r * 0.22, r * 0.11, r * 0.07, 0, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // 嘴
+  ctx.strokeStyle = '#C06060';
+  ctx.lineWidth = 1.5;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.arc(cx, eY + r * 0.35, r * 0.09, 0.15, Math.PI - 0.15);
+  ctx.stroke();
+}
+
+/** 帽子/冠繪製 */
+function _drawDeityHat(ctx, cx, cy, r, type, c1, c2) {
+  const hY = cy - r * 0.88;
+  switch (type) {
+    case 'phoenix': // 鳳冠 (媽祖/瑤池)
+      ctx.fillStyle = c1;
+      ctx.beginPath(); ctx.ellipse(cx, hY + r * 0.12, r * 0.92, r * 0.28, 0, Math.PI, 0); ctx.fill();
+      for (let i = 0; i < 3; i++) {
+        ctx.fillStyle = i % 2 === 0 ? c1 : c2;
+        ctx.beginPath(); ctx.ellipse(cx, hY - i * r * 0.22, r * (0.7 - i * 0.15), r * 0.14, 0, Math.PI, 0); ctx.fill();
+      }
+      ctx.fillStyle = '#FF0000';
+      for (let i = -3; i <= 3; i++) { ctx.beginPath(); ctx.arc(cx + i * r * 0.18, hY + r * 0.16, r * 0.035, 0, Math.PI * 2); ctx.fill(); }
+      // Side tassels
+      ctx.strokeStyle = c1; ctx.lineWidth = 1.5;
+      [-1, 1].forEach(s => {
+        for (let i = 0; i < 4; i++) {
+          ctx.beginPath(); ctx.moveTo(cx + s * r * 0.85, hY + r * 0.12);
+          ctx.quadraticCurveTo(cx + s * (r + i * 4), hY + r * 0.45, cx + s * r * 0.7, hY + r * 0.85 + i * 3);
+          ctx.stroke();
+          ctx.fillStyle = c1; ctx.beginPath(); ctx.arc(cx + s * r * 0.7, hY + r * 0.85 + i * 3, 2, 0, Math.PI * 2); ctx.fill();
+        }
+      });
+      break;
+    case 'lotus': // 蓮花冠 (觀音)
+      ctx.fillStyle = c1;
+      for (let a = -4; a <= 4; a++) {
+        ctx.save(); ctx.translate(cx + a * r * 0.1, hY + r * 0.05); ctx.rotate(a * 0.12);
+        ctx.beginPath(); ctx.ellipse(0, 0, r * 0.08, r * 0.32, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      }
+      ctx.fillStyle = '#FF0000'; ctx.beginPath(); ctx.arc(cx, hY + r * 0.1, r * 0.055, 0, Math.PI * 2); ctx.fill();
+      break;
+    case 'warrior': // 戰盔 (關帝/義民)
+      ctx.fillStyle = c1;
+      ctx.beginPath();
+      ctx.arc(cx, cy - r * 0.45, r * 1.05, Math.PI * 1.15, Math.PI * 1.85); ctx.lineTo(cx + r * 0.85, hY + r * 0.35); ctx.lineTo(cx - r * 0.85, hY + r * 0.35);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = c2;
+      ctx.beginPath(); ctx.moveTo(cx, hY - r * 0.6); ctx.quadraticCurveTo(cx + r * 0.5, hY - r * 0.3, cx + r * 0.15, hY + r * 0.15);
+      ctx.quadraticCurveTo(cx, hY + r * 0.05, cx, hY - r * 0.6); ctx.fill();
+      ctx.strokeStyle = c1; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(cx, cy - r * 0.3, r * 1.05, Math.PI * 1.2, Math.PI * 1.8); ctx.stroke();
+      break;
+    case 'ushnisha': // 肉髻 (佛)
+      ctx.fillStyle = c1;
+      ctx.beginPath(); ctx.arc(cx, hY + r * 0.18, r * 0.38, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = c2;
+      for (let a = 0; a < Math.PI * 6; a += 0.35) {
+        const sr = a * r * 0.012;
+        ctx.beginPath(); ctx.arc(cx + Math.cos(a) * sr, hY + r * 0.18 + Math.sin(a) * sr * 0.8, 1.5, 0, Math.PI * 2); ctx.fill();
+      }
+      break;
+    case 'official': // 官帽 (王爺/城隍/保生)
+      ctx.fillStyle = c1;
+      ctx.beginPath(); ctx.roundRect(cx - r * 0.5, hY - r * 0.08, r, r * 0.4, 5); ctx.fill();
+      [-1, 1].forEach(s => {
+        ctx.beginPath(); ctx.moveTo(cx + s * r * 0.5, hY + r * 0.08); ctx.lineTo(cx + s * r * 1.3, hY - r * 0.08);
+        ctx.lineTo(cx + s * r * 1.2, hY + r * 0.12); ctx.closePath(); ctx.fill();
+      });
+      ctx.strokeStyle = c2; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.roundRect(cx - r * 0.5, hY - r * 0.08, r, r * 0.4, 5); ctx.stroke();
+      break;
+    case 'scholar': // 儒冠 (孔子)
+      ctx.fillStyle = c1;
+      ctx.beginPath(); ctx.roundRect(cx - r * 0.35, hY - r * 0.48, r * 0.7, r * 0.7, 3); ctx.fill();
+      ctx.strokeStyle = c2; ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = c2; ctx.fillRect(cx - r * 0.5, hY - r * 0.05, r, r * 0.055);
+      break;
+    case 'round': // 圓帽 (土地公)
+      ctx.fillStyle = c1;
+      ctx.beginPath(); ctx.arc(cx, hY + r * 0.12, r * 0.6, Math.PI, 0); ctx.fill();
+      ctx.strokeStyle = c2; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(cx, hY + r * 0.14, r * 0.62, Math.PI * 1.05, Math.PI * 1.95); ctx.stroke();
+      break;
+    case 'emperor': // 冕旒 (玉帝)
+      ctx.fillStyle = c1; ctx.fillRect(cx - r * 0.85, hY - r * 0.12, r * 1.7, r * 0.11);
+      ctx.fillStyle = c2; ctx.beginPath(); ctx.arc(cx, hY + r * 0.08, r * 0.55, Math.PI, 0); ctx.fill();
+      ctx.fillStyle = c1;
+      [-1, 1].forEach(s => { for (let i = 0; i < 5; i++) { ctx.beginPath(); ctx.arc(cx + s * r * 0.75, hY + r * 0.08 + i * r * 0.1, r * 0.03, 0, Math.PI * 2); ctx.fill(); } });
+      break;
+    case 'buns': // 雙丸子頭 (哪吒)
+      ctx.fillStyle = c1;
+      [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(cx + s * r * 0.52, hY + r * 0.03, r * 0.26, 0, Math.PI * 2); ctx.fill(); });
+      ctx.strokeStyle = c2; ctx.lineWidth = 3;
+      [-1, 1].forEach(s => {
+        ctx.beginPath(); ctx.moveTo(cx + s * r * 0.78, hY + r * 0.08);
+        ctx.quadraticCurveTo(cx + s * r * 1.3, hY + r * 0.55, cx + s * r * 0.95, hY + r * 0.8); ctx.stroke();
+      });
+      break;
+    case 'monk': // 光頭 (清水祖師)
+      ctx.strokeStyle = _hr(d.hc, 0.4); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(cx, cy - r * 0.45, r * 0.72, 0, Math.PI * 2); ctx.stroke();
+      break;
+    case 'topknot': // 道髻
+      ctx.fillStyle = c1;
+      ctx.beginPath(); ctx.arc(cx, hY + r * 0.12, r * 0.26, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = c2; ctx.fillRect(cx - r * 0.38, hY + r * 0.1, r * 0.76, r * 0.04);
+      break;
+  }
+}
+
+/** 鞭炮爆竹特效 */
+function createFirecrackerBurst() {
+  for (let s = 0; s < 4; s++) {
     setTimeout(() => {
-      const el = document.createElement('div');
-      el.className = 'fortune-char';
-      el.textContent = theme.chars[Math.floor(Math.random() * theme.chars.length)];
-      el.style.left = (5 + Math.random() * 90) + '%';
-      el.style.bottom = '0';
-      el.style.fontSize = (1.5 + Math.random() * 2.5) + 'rem';
-      el.style.color = theme.color;
-      el.style.textShadow = `0 0 20px ${theme.color}`;
-      document.body.appendChild(el);
-      el.addEventListener('animationend', () => el.remove());
-    }, 300 + i * 200);
+      const x = 10 + Math.random() * 80;
+      const str = document.createElement('div');
+      str.className = 'firecracker-string';
+      str.style.left = x + '%';
+      // Fuse
+      const fuse = document.createElement('div');
+      fuse.className = 'firecracker-fuse';
+      str.appendChild(fuse);
+      // Cracker units
+      for (let i = 0; i < 10; i++) {
+        const u = document.createElement('div');
+        u.className = 'firecracker-unit';
+        str.appendChild(u);
+      }
+      document.body.appendChild(str);
+      // Explode after drop
+      setTimeout(() => {
+        str.remove();
+        _firecrackerSparks(x);
+      }, 1400);
+    }, s * 550);
   }
+}
 
-  // 5. Themed blessing banner
-  const banner = document.createElement('div');
-  banner.className = 'blessing-banner';
-  banner.textContent = theme.title;
-  banner.style.background = `linear-gradient(90deg, transparent, ${theme.color}33, ${theme.color}55, ${theme.color}33, transparent)`;
-  banner.style.color = theme.color;
-  banner.style.textShadow = `0 0 15px ${theme.color}`;
-  document.body.appendChild(banner);
-  banner.addEventListener('animationend', () => banner.remove());
+function _firecrackerSparks(x) {
+  const colors = ['#FF0000', '#FF4400', '#FFD700', '#FF6600', '#FFAA00', '#FF2200'];
+  for (let i = 0; i < 28; i++) {
+    const sp = document.createElement('div');
+    sp.className = 'firecracker-spark';
+    sp.style.left = x + '%';
+    sp.style.top = '55%';
+    sp.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 40 + Math.random() * 160;
+    sp.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+    sp.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+    sp.style.animationDelay = (Math.random() * 0.15) + 's';
+    document.body.appendChild(sp);
+    sp.addEventListener('animationend', () => sp.remove());
+  }
+  // Flash
+  const fl = document.createElement('div');
+  fl.className = 'firecracker-flash';
+  fl.style.left = x + '%';
+  fl.style.top = '52%';
+  document.body.appendChild(fl);
+  fl.addEventListener('animationend', () => fl.remove());
 }
 
 function animateCoinDrop(amount) {

@@ -600,52 +600,143 @@ body {
   line-height: 1.5;
 }
 
-/* ===== Deity-themed mega effect overlays ===== */
-.deity-mega-overlay {
+/* ===== Q版主神全屏特效 ===== */
+.deity-portrait-wrap {
   position: fixed;
   inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.72);
+  animation: deityPortraitIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
   pointer-events: none;
-  z-index: 9998;
-  animation: deityOverlayPulse 3.5s ease-in-out;
-  opacity: 0;
 }
-@keyframes deityOverlayPulse {
-  0% { opacity: 0; }
-  15% { opacity: 1; }
-  70% { opacity: 0.8; }
-  100% { opacity: 0; }
+.deity-portrait-wrap.fading {
+  animation: deityPortraitOut 1s ease-in forwards;
+}
+@keyframes deityPortraitIn {
+  0% { opacity: 0; transform: scale(0.2) rotate(-5deg); }
+  60% { opacity: 1; transform: scale(1.08) rotate(1deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+@keyframes deityPortraitOut {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.15); }
+}
+.deity-portrait-canvas {
+  max-width: 85vw;
+  max-height: 52vh;
+  filter: drop-shadow(0 0 40px rgba(255,215,0,0.4));
+  animation: deityCanvasFloat 3s ease-in-out infinite alternate;
+}
+@keyframes deityCanvasFloat {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-8px); }
+}
+.deity-portrait-name {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 2.4rem;
+  margin-top: 0.5rem;
+  text-align: center;
+  animation: deityNameGlow 2s ease-in-out infinite alternate;
+}
+@keyframes deityNameGlow {
+  0% { filter: brightness(1) drop-shadow(0 0 8px currentColor); }
+  100% { filter: brightness(1.4) drop-shadow(0 0 24px currentColor); }
+}
+.deity-portrait-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.15rem;
+  margin-top: 0.3rem;
+  text-align: center;
+  opacity: 0.9;
+  animation: fadeIn 1.2s ease-out 0.5s both;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 0.9; transform: translateY(0); } }
+
+.deity-float-emoji {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10001;
+  animation: deityEmojiPop 2.8s ease-out forwards;
+}
+@keyframes deityEmojiPop {
+  0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+  25% { transform: scale(1.4) rotate(10deg); opacity: 1; }
+  100% { transform: scale(0.4) translateY(-120px) rotate(0); opacity: 0; }
 }
 
-.deity-mega-char {
+/* ===== 鞭炮特效 ===== */
+.firecracker-string {
   position: fixed;
-  font-size: 4rem;
+  top: -250px;
+  z-index: 10002;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  animation: firecrackerDrop 1.4s ease-in forwards;
   pointer-events: none;
-  z-index: 9999;
-  animation: deityCharFloat 3s ease-out forwards;
-  text-shadow: 0 0 30px currentColor, 0 0 60px currentColor;
 }
-@keyframes deityCharFloat {
-  0% { transform: scale(0.3) rotate(-20deg); opacity: 0; }
-  20% { transform: scale(1.2) rotate(5deg); opacity: 1; }
-  60% { transform: scale(1) translateY(-40px) rotate(0deg); opacity: 0.9; }
-  100% { transform: scale(0.8) translateY(-120px); opacity: 0; }
+@keyframes firecrackerDrop {
+  0% { top: -250px; opacity: 1; }
+  85% { opacity: 1; }
+  100% { top: 50%; opacity: 0.8; }
 }
-
-.deity-mega-wave {
-  position: fixed;
-  left: 50%;
+.firecracker-fuse {
+  width: 2px;
+  height: 18px;
+  background: linear-gradient(180deg, #FFD700, #FF6600);
+  border-radius: 1px;
+}
+.firecracker-unit {
+  width: 9px;
+  height: 15px;
+  background: linear-gradient(90deg, #CC0000, #FF1111, #CC0000);
+  border-radius: 2px;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+  position: relative;
+}
+.firecracker-unit::before {
+  content: '';
+  position: absolute;
   top: 50%;
-  width: 300vmax;
-  height: 300vmax;
-  transform: translate(-50%, -50%) scale(0);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9997;
-  animation: deityWaveExpand 2.5s ease-out forwards;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 5px;
+  height: 1.5px;
+  background: #FFD700;
+  border-radius: 1px;
 }
-@keyframes deityWaveExpand {
-  0% { transform: translate(-50%, -50%) scale(0); opacity: 0.6; }
-  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+.firecracker-spark {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  z-index: 10003;
+  pointer-events: none;
+  animation: sparkBurst 0.9s ease-out forwards;
+}
+@keyframes sparkBurst {
+  0% { transform: translate(0, 0) scale(1.2); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+}
+.firecracker-flash {
+  position: fixed;
+  width: 220px;
+  height: 220px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,200,0.85), rgba(255,100,0,0.35), transparent 70%);
+  z-index: 10002;
+  pointer-events: none;
+  animation: flashPop 0.45s ease-out forwards;
+}
+@keyframes flashPop {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
 }
 
 .blessing-tag {
