@@ -10,7 +10,8 @@ const state = {
   currentTemple: null,
   worshipStep: 0, // 0: none, 1: incense, 2: jiaobei, 3: fortune
   fireworks: null,
-  falling: null
+  falling: null,
+  blessing3d: null
 };
 
 function saveState() {
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderStamps();
   updateProgress();
   updateDonationDisplay();
+  renderImageCredits();
   bindEvents();
 
   // Hide loading screen
@@ -46,6 +48,8 @@ function initEffects() {
   const canvas = document.getElementById('fireworkCanvas');
   state.fireworks = new FireworkSystem(canvas);
   state.falling = new FallingSystem(document.getElementById('fallingContainer'));
+  const blessingCanvas = document.getElementById('blessing3dCanvas');
+  if (blessingCanvas) state.blessing3d = new Blessing3DSystem(blessingCanvas);
 }
 
 // ===== Render Temples =====
@@ -71,9 +75,14 @@ function renderTemples() {
       card.className = 'temple-card';
       card.dataset.templeId = temple.id;
       const isVisited = state.visited.has(temple.id);
+
+      const templeVisual = temple.photoUrl
+        ? `<img src="${temple.photoUrl}" alt="${temple.name} 照片" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
+        : temple.icon;
+
       card.innerHTML = `
         <div class="stamp-badge ${isVisited ? 'collected' : ''}">✅</div>
-        <div class="icon">${temple.icon}</div>
+        <div class="icon">${templeVisual}</div>
         <div class="name">${temple.name}</div>
         <div class="city">${temple.city} · ${temple.deity}</div>
         <div class="deity">🙏 ${temple.blessing}</div>
@@ -178,7 +187,16 @@ function openTemple(temple) {
   state.worshipStep = 0;
 
   const modal = document.getElementById('modalOverlay');
-  document.getElementById('templeIcon').textContent = temple.icon;
+
+  const iconEl = document.getElementById('templeIcon');
+  if (iconEl) {
+    if (temple.photoUrl) {
+      iconEl.innerHTML = `<img src="${temple.photoUrl}" alt="${temple.name} 照片" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
+    } else {
+      iconEl.textContent = temple.icon;
+    }
+  }
+
   document.getElementById('templeName').textContent = temple.name;
   document.getElementById('templeMeta').textContent = `${temple.city} · ${temple.deity}`;
   document.getElementById('templeDesc').textContent = temple.desc;
@@ -520,6 +538,7 @@ function processDonation(amount) {
     state.falling.drop(40);
     createGoldenBurst();
     createBlessingBanner(amount);
+    playBlessing3D('mega', 4200);
     createRedEnvelopeRain(25);
     createFortuneCharShower(20);
     createSparkleRing(3);
@@ -543,6 +562,7 @@ function processDonation(amount) {
     state.fireworks.burst(5);
     state.falling.drop(25);
     createGoldenBurst();
+    playBlessing3D('gold', 3400);
     createRedEnvelopeRain(15);
     createFortuneCharShower(12);
     createSparkleRing(2);
@@ -561,6 +581,7 @@ function processDonation(amount) {
     createSparkleRing(1);
     createFloatingBlessing(amount);
     createBlessingBanner(amount);
+    playBlessing3D('gold', 2200);
     state.fireworks.start();
     state.fireworks.burst(2);
     setTimeout(() => { if (state.fireworks.particles.length === 0) state.fireworks.stop(); }, 3000);
@@ -569,6 +590,45 @@ function processDonation(amount) {
     state.falling.drop(5);
     createFloatingBlessing(amount);
     createSparkleRing(1);
+    playBlessing3D('gold', 1600);
+  }
+}
+
+function playBlessing3D(preset, durationMs) {
+  const canvas = document.getElementById('blessing3dCanvas');
+  if (!state.blessing3d || !canvas) return;
+  canvas.classList.add('active');
+  state.blessing3d.play(preset, durationMs);
+  window.clearTimeout(playBlessing3D._t);
+  playBlessing3D._t = window.setTimeout(() => {
+    canvas.classList.remove('active');
+  }, Math.max(800, durationMs));
+}
+
+function renderImageCredits() {
+  const list = document.getElementById('imageCredits');
+  if (!list) return;
+  list.innerHTML = '';
+  const withCredits = (typeof TEMPLES !== 'undefined')
+    ? TEMPLES.filter(t => t.photoCreditUrl)
+    : [];
+
+  if (withCredits.length === 0) {
+    const li = document.createElement('li');
+    li.textContent = '目前尚未載入照片授權清單（未使用外部照片或尚未設定來源）。';
+    list.appendChild(li);
+    return;
+  }
+
+  for (const t of withCredits) {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = t.photoCreditUrl;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.textContent = `${t.name}（來源/授權）`;
+    li.appendChild(a);
+    list.appendChild(li);
   }
 }
 

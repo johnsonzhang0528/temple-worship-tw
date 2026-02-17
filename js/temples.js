@@ -14,7 +14,10 @@ const TEMPLES = [
     desc: '創建於清乾隆三年（1738年），為國定古蹟，是台北最著名的廟宇之一。香火鼎盛，信眾絡繹不絕，月老殿更是求姻緣聖地。',
     blessing: '闔家平安、學業進步、感情順利',
     color: '#8B0000',
-    icon: '🐉'
+    icon: '🐉',
+    // Photo source must be verified and freely usable (see photoCreditUrl)
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Lungshan_Temple%2C_Taipei_%282017%29.jpg/640px-Lungshan_Temple%2C_Taipei_%282017%29.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Lungshan_Temple,_Taipei_(2017).jpg'
   },
   {
     id: 'xingtian',
@@ -25,7 +28,9 @@ const TEMPLES = [
     desc: '主祀關聖帝君，以收驚及問事聞名。禁止燒香、燒金紙，提倡心誠則靈、環保祭祀。',
     blessing: '事業有成、正義護身、商業興隆',
     color: '#B22222',
-    icon: '⚔️'
+    icon: '⚔️',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Xingtian_Temple_Taipei_20190310.jpg/640px-Xingtian_Temple_Taipei_20190310.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Xingtian_Temple_Taipei_20190310.jpg'
   },
   {
     id: 'baoan',
@@ -194,7 +199,9 @@ const TEMPLES = [
     desc: '每年農曆三月舉辦的大甲媽祖遶境進香，為全球三大宗教盛事之一，九天八夜徒步三百多公里，吸引數百萬人參與。',
     blessing: '出入平安、航海順利、心想事成',
     color: '#DC143C',
-    icon: '🌊'
+    icon: '🌊',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Dajia_Jenn_Lann_Temple_2020.jpg/640px-Dajia_Jenn_Lann_Temple_2020.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Dajia_Jenn_Lann_Temple_2020.jpg'
   },
   {
     id: 'lecheng',
@@ -293,7 +300,9 @@ const TEMPLES = [
     desc: '創建於清康熙三十三年（1694年），為全台歷史最悠久、最重要的媽祖廟之一。每年農曆三月瘋媽祖，炸轎場面震撼。',
     blessing: '媽祖庇佑、炸轎開運、全家平安',
     color: '#FF0000',
-    icon: '🧨'
+    icon: '🧨',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Beigang_Chaotian_Temple_front_2019.jpg/640px-Beigang_Chaotian_Temple_front_2019.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Beigang_Chaotian_Temple_front_2019.jpg'
   },
   {
     id: 'xingang',
@@ -407,7 +416,9 @@ const TEMPLES = [
     desc: '由星雲大師創建，為台灣最大的佛教道場之一。佛陀紀念館壯觀宏偉，大佛高達108公尺，為國際佛教聖地。',
     blessing: '智慧增長、慈悲喜捨、煩惱消除',
     color: '#DAA520',
-    icon: '🪷'
+    icon: '🪷',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Fo_Guang_Shan_Buddha_Museum_2019.jpg/640px-Fo_Guang_Shan_Buddha_Museum_2019.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Fo_Guang_Shan_Buddha_Museum_2019.jpg'
   },
   {
     id: 'sanfeng',

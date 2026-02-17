@@ -177,6 +177,139 @@ class IncenseSmoke {
   }
 }
 
+// ===== 全屏 3D-like 祈福光陣（Canvas，無需外部套件） =====
+class Blessing3DSystem {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.running = false;
+    this.particles = [];
+    this._raf = null;
+    this._stopTimer = null;
+    this._t = 0;
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+  }
+
+  resize() {
+    this.canvas.width = Math.floor(window.innerWidth * (window.devicePixelRatio || 1));
+    this.canvas.height = Math.floor(window.innerHeight * (window.devicePixelRatio || 1));
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const dpr = window.devicePixelRatio || 1;
+    this.ctx.scale(dpr, dpr);
+  }
+
+  play(preset = 'gold', durationMs = 3200) {
+    this._buildParticles(preset);
+    this.start();
+    clearTimeout(this._stopTimer);
+    this._stopTimer = setTimeout(() => this.stop(), durationMs);
+  }
+
+  _buildParticles(preset) {
+    const count = preset === 'mega' ? 260 : preset === 'gold' ? 180 : 140;
+    const palette = preset === 'mega'
+      ? ['rgba(255,215,0,', 'rgba(255,128,0,', 'rgba(255,60,60,', 'rgba(255,255,255,']
+      : ['rgba(255,215,0,', 'rgba(255,165,0,', 'rgba(255,255,255,'];
+
+    this.particles = [];
+    for (let i = 0; i < count; i++) {
+      // Random points on a loose spiral ring
+      const a = Math.random() * Math.PI * 2;
+      const r = 0.2 + Math.random() * 0.9;
+      const y = (Math.random() - 0.5) * 1.6;
+      this.particles.push({
+        x: Math.cos(a) * r,
+        y,
+        z: Math.sin(a) * r,
+        vx: (Math.random() - 0.5) * 0.002,
+        vy: (Math.random() - 0.5) * 0.002,
+        vz: (Math.random() - 0.5) * 0.002,
+        baseSize: 1.2 + Math.random() * 2.2,
+        color: palette[Math.floor(Math.random() * palette.length)]
+      });
+    }
+  }
+
+  start() {
+    if (this.running) return;
+    this.running = true;
+    this._t = 0;
+    const animate = () => {
+      if (!this.running) return;
+      this._t += 0.016;
+      this._render();
+      this._raf = requestAnimationFrame(animate);
+    };
+    animate();
+  }
+
+  stop() {
+    this.running = false;
+    if (this._raf) cancelAnimationFrame(this._raf);
+    this._raf = null;
+    this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    this.particles = [];
+  }
+
+  _render() {
+    const ctx = this.ctx;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    ctx.clearRect(0, 0, w, h);
+
+    // Subtle background glow
+    const bg = ctx.createRadialGradient(w * 0.5, h * 0.45, 10, w * 0.5, h * 0.45, Math.min(w, h) * 0.55);
+    bg.addColorStop(0, 'rgba(255, 215, 0, 0.09)');
+    bg.addColorStop(1, 'rgba(255, 215, 0, 0)');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, w, h);
+
+    const rotY = this._t * 0.9;
+    const rotX = Math.sin(this._t * 0.6) * 0.25;
+    const focal = 2.2;
+
+    for (const p of this.particles) {
+      // Update
+      p.x += p.vx;
+      p.y += p.vy;
+      p.z += p.vz;
+
+      // Keep in bounds
+      if (p.y > 1.0) p.y = -1.0;
+      if (p.y < -1.0) p.y = 1.0;
+
+      // Rotate around Y
+      const cosY = Math.cos(rotY);
+      const sinY = Math.sin(rotY);
+      let x1 = p.x * cosY - p.z * sinY;
+      let z1 = p.x * sinY + p.z * cosY;
+
+      // Rotate around X
+      const cosX = Math.cos(rotX);
+      const sinX = Math.sin(rotX);
+      let y2 = p.y * cosX - z1 * sinX;
+      let z2 = p.y * sinX + z1 * cosX;
+
+      const depth = focal / (focal + z2 + 1.4);
+      const sx = w * 0.5 + x1 * w * 0.28 * depth;
+      const sy = h * 0.5 + y2 * h * 0.22 * depth;
+
+      const alpha = Math.max(0, Math.min(1, 0.12 + depth * 0.55));
+      const size = p.baseSize * (0.9 + depth * 1.8);
+
+      // Glow dot
+      const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, size * 3);
+      g.addColorStop(0, `${p.color}${alpha})`);
+      g.addColorStop(1, `${p.color}0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(sx, sy, size * 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
 // ===== 擲筊動畫 =====
 function animateJiaoBei(container, result) {
   return new Promise(resolve => {
