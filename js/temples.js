@@ -15,9 +15,10 @@ const TEMPLES = [
     blessing: '闔家平安、學業進步、感情順利',
     color: '#8B0000',
     icon: '🐉',
+    deityCategory: 'guanyin',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Bangka_Lungshan_Temple_%28cropped%29.jpg/640px-Bangka_Lungshan_Temple_%28cropped%29.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Bangka_Lungshan_Temple_(cropped).jpg'
     // Photo source must be verified and freely usable (see photoCreditUrl)
-    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Lungshan_Temple%2C_Taipei_%282017%29.jpg/640px-Lungshan_Temple%2C_Taipei_%282017%29.jpg',
-    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Lungshan_Temple,_Taipei_(2017).jpg'
   },
   {
     id: 'xingtian',
@@ -29,8 +30,9 @@ const TEMPLES = [
     blessing: '事業有成、正義護身、商業興隆',
     color: '#B22222',
     icon: '⚔️',
-    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Xingtian_Temple_Taipei_20190310.jpg/640px-Xingtian_Temple_Taipei_20190310.jpg',
-    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Xingtian_Temple_Taipei_20190310.jpg'
+    deityCategory: 'guandi',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Xingtian_Temple_07.23.jpg/640px-Xingtian_Temple_07.23.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Xingtian_Temple_07.23.jpg'
   },
   {
     id: 'baoan',
@@ -41,7 +43,10 @@ const TEMPLES = [
     desc: '創建於清嘉慶十年（1805年），主祀保生大帝，為國定古蹟。每年保生文化祭為一大盛事，獲聯合國教科文組織亞太文化資產保存獎。',
     blessing: '身體健康、病痛消除、福壽綿長',
     color: '#CD5C5C',
-    icon: '🏥'
+    icon: '🏥',
+    deityCategory: 'baosheng',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/%E5%8F%B0%E5%8C%97%E4%BF%9D%E5%AE%89%E5%AE%AE1.jpg/640px-%E5%8F%B0%E5%8C%97%E4%BF%9D%E5%AE%89%E5%AE%AE1.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E5%8F%B0%E5%8C%97%E4%BF%9D%E5%AE%89%E5%AE%AE1.jpg'
   },
   {
     id: 'xiahai',
@@ -52,7 +57,10 @@ const TEMPLES = [
     desc: '創建於咸豐六年（1856年），面積雖小卻香火極旺。月老靈驗聞名海內外，每年促成無數良緣，被譽為最強月老廟。',
     blessing: '姻緣天成、桃花朵朵、良緣速配',
     color: '#FF69B4',
-    icon: '💕'
+    icon: '💕',
+    deityCategory: 'chenghuang',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/%E5%A4%A7%E7%A8%BB%E5%9F%95%E9%9C%9E%E6%B5%B7%E5%9F%8E%E9%9A%8D%E5%BB%9F%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg/640px-%E5%A4%A7%E7%A8%BB%E5%9F%95%E9%9C%9E%E6%B5%B7%E5%9F%8E%E9%9A%8D%E5%BB%9F%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E7%A8%BB%E5%9F%95%E9%9C%9E%E6%B5%B7%E5%9F%8E%E9%9A%8D%E5%BB%9F%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg'
   },
   {
     id: 'zhinan',
@@ -63,7 +71,10 @@ const TEMPLES = [
     desc: '位於木柵指南山上，俗稱仙公廟。環境清幽，為台北知名道教聖地，主殿氣勢非凡。',
     blessing: '智慧開竅、修身養性、逢凶化吉',
     color: '#A0522D',
-    icon: '⛰️'
+    icon: '⛰️',
+    deityCategory: 'daoist',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Zhinan_Temple_20220815.jpg/640px-Zhinan_Temple_20220815.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Zhinan_Temple_20220815.jpg'
   },
   {
     id: 'guandu',
@@ -74,7 +85,10 @@ const TEMPLES = [
     desc: '創建於清順治十八年（1661年），為北台灣最古老的媽祖廟。位於關渡平原，財神洞與古佛洞為一大特色。',
     blessing: '財運亨通、出入平安、風調雨順',
     color: '#CD853F',
-    icon: '🦅'
+    icon: '🦅',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Kuan-du_Temple.JPG/640px-Kuan-du_Temple.JPG',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Kuan-du_Temple.JPG'
   },
   {
     id: 'songshan_ciyou',
@@ -85,7 +99,10 @@ const TEMPLES = [
     desc: '創建於清乾隆十八年（1753年），位於饒河夜市旁。為台北松山地區信仰中心，過年期間香客絡繹不絕。',
     blessing: '生意興隆、家庭和睦、旅途平安',
     color: '#B22222',
-    icon: '🌃'
+    icon: '🌃',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/%E6%9D%BE%E5%B1%B1%E6%85%88%E7%A5%90%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg/640px-%E6%9D%BE%E5%B1%B1%E6%85%88%E7%A5%90%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E6%9D%BE%E5%B1%B1%E6%85%88%E7%A5%90%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg'
   },
   {
     id: 'sanxia',
@@ -96,7 +113,10 @@ const TEMPLES = [
     desc: '有「東方藝術殿堂」之譽，廟宇雕刻精美絕倫，由李梅樹教授主持重建。每年神豬賽為重要民俗活動。',
     blessing: '風調雨順、平安順遂、藝術薰陶',
     color: '#8B4513',
-    icon: '🎨'
+    icon: '🎨',
+    deityCategory: 'zushi',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Sanxia_Zushi_Temple.jpg/640px-Sanxia_Zushi_Temple.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Sanxia_Zushi_Temple.jpg'
   },
   {
     id: 'hongludi',
@@ -107,7 +127,10 @@ const TEMPLES = [
     desc: '位於中和南勢角山上，海拔302公尺，可俯瞰大台北夜景。全台最大土地公像矗立山頭，求財靈驗聞名。',
     blessing: '招財進寶、事業順利、五穀豐收',
     color: '#FFD700',
-    icon: '💰'
+    icon: '💰',
+    deityCategory: 'earth',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/%E7%83%98%E7%88%90%E5%9C%B0%E5%8D%97%E5%B1%B1%E7%A6%8F%E5%BE%B7%E5%AE%AEDSC_0245.jpg/640px-%E7%83%98%E7%88%90%E5%9C%B0%E5%8D%97%E5%B1%B1%E7%A6%8F%E5%BE%B7%E5%AE%AEDSC_0245.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E7%83%98%E7%88%90%E5%9C%B0%E5%8D%97%E5%B1%B1%E7%A6%8F%E5%BE%B7%E5%AE%AEDSC_0245.jpg'
   },
   {
     id: 'zhulinshan',
@@ -118,7 +141,10 @@ const TEMPLES = [
     desc: '位於林口，建築宏偉壯觀，為北台灣重要觀音信仰中心。每年農曆二月十九觀音聖誕盛況空前。',
     blessing: '觀音庇佑、消災解厄、平安健康',
     color: '#9370DB',
-    icon: '🪷'
+    icon: '🪷',
+    deityCategory: 'guanyin',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/%E7%AB%B9%E6%9E%97%E5%B1%B1%E8%A7%80%E9%9F%B3%E5%AF%BA%E6%AD%A3%E9%96%80.JPG/640px-%E7%AB%B9%E6%9E%97%E5%B1%B1%E8%A7%80%E9%9F%B3%E5%AF%BA%E6%AD%A3%E9%96%80.JPG',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E7%AB%B9%E6%9E%97%E5%B1%B1%E8%A7%80%E9%9F%B3%E5%AF%BA%E6%AD%A3%E9%96%80.JPG'
   },
   {
     id: 'xinzhuang_ciyou',
@@ -129,7 +155,10 @@ const TEMPLES = [
     desc: '創建於清雍正七年（1729年），為新莊廟街的核心，見證新莊從港口到市鎮的發展歷史。為市定古蹟。',
     blessing: '歷史傳承、社區平安、商業興旺',
     color: '#CD5C5C',
-    icon: '🏛️'
+    icon: '🏛️',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/%E6%96%B0%E8%8E%8A%E6%85%88%E7%A5%90%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg/640px-%E6%96%B0%E8%8E%8A%E6%85%88%E7%A5%90%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E6%96%B0%E8%8E%8A%E6%85%88%E7%A5%90%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg'
   },
   {
     id: 'keelung_qingan',
@@ -140,7 +169,10 @@ const TEMPLES = [
     desc: '創建於清嘉慶二十年（1815年），為基隆三大廟之一。每年中元祭典為國家重要民俗活動。',
     blessing: '海港平安、中元普渡、航運順利',
     color: '#4682B4',
-    icon: '⚓'
+    icon: '⚓',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Keelung_Qing%27an_Temple-01.2024-09-16.jpg/640px-Keelung_Qing%27an_Temple-01.2024-09-16.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Keelung_Qing%27an_Temple-01.2024-09-16.jpg'
   },
   {
     id: 'taoyuan_jingfu',
@@ -151,7 +183,10 @@ const TEMPLES = [
     desc: '創建於清嘉慶年間，為桃園市中心最重要的信仰中心。每年繞境活動為桃園一大盛事。',
     blessing: '開拓進取、地方安寧、五福臨門',
     color: '#B8860B',
-    icon: '🍑'
+    icon: '🍑',
+    deityCategory: 'other',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/%E6%A1%83%E5%9C%92%E6%99%AF%E7%A6%8F%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg/640px-%E6%A1%83%E5%9C%92%E6%99%AF%E7%A6%8F%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E6%A1%83%E5%9C%92%E6%99%AF%E7%A6%8F%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg'
   },
   {
     id: 'hsinchu_chenghuang',
@@ -162,7 +197,10 @@ const TEMPLES = [
     desc: '創建於清乾隆十三年（1748年），為全台官位最高的城隍爺（威靈公）。廟口小吃聞名全台，是美食與信仰的結合。',
     blessing: '公平正義、事業亨通、美食福報',
     color: '#696969',
-    icon: '⚖️'
+    icon: '⚖️',
+    deityCategory: 'chenghuang',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/COVID-19%E6%9C%9F%E9%96%93%E7%9A%84%E6%96%B0%E7%AB%B9%E9%83%BD%E5%9F%8E%E9%9A%8D%E5%BB%9F.jpg/640px-COVID-19%E6%9C%9F%E9%96%93%E7%9A%84%E6%96%B0%E7%AB%B9%E9%83%BD%E5%9F%8E%E9%9A%8D%E5%BB%9F.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:COVID-19%E6%9C%9F%E9%96%93%E7%9A%84%E6%96%B0%E7%AB%B9%E9%83%BD%E5%9F%8E%E9%9A%8D%E5%BB%9F.jpg'
   },
   {
     id: 'yilan_zhaoing',
@@ -173,7 +211,10 @@ const TEMPLES = [
     desc: '創建於清嘉慶十三年（1808年），為全台唯一座北朝南的媽祖廟（面向清廷方向），為縣定古蹟。',
     blessing: '蘭陽守護、學子庇佑、方位吉祥',
     color: '#2E8B57',
-    icon: '🧭'
+    icon: '🧭',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/2016-10-13_Yilan_Zhaoying_Temple.jpg/640px-2016-10-13_Yilan_Zhaoying_Temple.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:2016-10-13_Yilan_Zhaoying_Temple.jpg'
   },
 
   // ======================================================
@@ -188,7 +229,10 @@ const TEMPLES = [
     desc: '為客家族群重要的義民信仰中心，紀念清代為保衛鄉土而犧牲的義民。每年義民祭典莊嚴隆重。',
     blessing: '忠義護佑、族群團結、鄉土平安',
     color: '#556B2F',
-    icon: '🛡️'
+    icon: '🛡️',
+    deityCategory: 'yimin',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/%E8%8B%97%E6%A0%97%E5%B8%82%E7%A4%BE%E5%AF%AE%E5%B2%A1%E7%BE%A9%E6%B0%91%E5%BB%9F.jpg/640px-%E8%8B%97%E6%A0%97%E5%B8%82%E7%A4%BE%E5%AF%AE%E5%B2%A1%E7%BE%A9%E6%B0%91%E5%BB%9F.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E8%8B%97%E6%A0%97%E5%B8%82%E7%A4%BE%E5%AF%AE%E5%B2%A1%E7%BE%A9%E6%B0%91%E5%BB%9F.jpg'
   },
   {
     id: 'dajia',
@@ -200,8 +244,9 @@ const TEMPLES = [
     blessing: '出入平安、航海順利、心想事成',
     color: '#DC143C',
     icon: '🌊',
-    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Dajia_Jenn_Lann_Temple_2020.jpg/640px-Dajia_Jenn_Lann_Temple_2020.jpg',
-    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Dajia_Jenn_Lann_Temple_2020.jpg'
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Dajia_Jenn_Lann_Temple-03.2024-08-27.jpg/640px-Dajia_Jenn_Lann_Temple-03.2024-08-27.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Dajia_Jenn_Lann_Temple-03.2024-08-27.jpg'
   },
   {
     id: 'lecheng',
@@ -212,7 +257,10 @@ const TEMPLES = [
     desc: '創建於清乾隆年間，俗稱旱溪媽祖廟。每年大甲媽祖回鑾必經此廟。旱溪媽祖遶境十八庄為台中重要民俗。',
     blessing: '旱澇平安、地方繁榮、農作豐收',
     color: '#CD853F',
-    icon: '🌾'
+    icon: '🌾',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/%E8%87%BA%E4%B8%AD%E6%A8%82%E6%88%90%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg/640px-%E8%87%BA%E4%B8%AD%E6%A8%82%E6%88%90%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E8%87%BA%E4%B8%AD%E6%A8%82%E6%88%90%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg'
   },
   {
     id: 'wanhe',
@@ -223,7 +271,10 @@ const TEMPLES = [
     desc: '創建於清雍正四年（1726年），為台中最古老的廟宇。位於南屯老街，字姓戲為獨特的文化資產。',
     blessing: '萬事和諧、老街風華、文化傳承',
     color: '#8B4513',
-    icon: '🏚️'
+    icon: '🏚️',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/%E8%90%AC%E5%92%8C%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg/640px-%E8%90%AC%E5%92%8C%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E8%90%AC%E5%92%8C%E5%AE%AE%E6%AD%A3%E9%9D%A2%E7%85%A7.jpg'
   },
   {
     id: 'lukang_longshan',
@@ -234,7 +285,10 @@ const TEMPLES = [
     desc: '創建於明永曆年間，為國定古蹟。建築格局完整，戲台藻井為全台之冠，被譽為台灣最美的龍山寺。',
     blessing: '觀音慈悲、藝術福德、古蹟祈福',
     color: '#A0522D',
-    icon: '🏛️'
+    icon: '🏛️',
+    deityCategory: 'guanyin',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/%E9%B9%BF%E6%B8%AF%E9%BE%8D%E5%B1%B1%E5%AF%BA%28%E5%A4%9C%E6%8B%8D%E6%AD%A3%E9%96%80%29.jpg/640px-%E9%B9%BF%E6%B8%AF%E9%BE%8D%E5%B1%B1%E5%AF%BA%28%E5%A4%9C%E6%8B%8D%E6%AD%A3%E9%96%80%29.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E9%B9%BF%E6%B8%AF%E9%BE%8D%E5%B1%B1%E5%AF%BA(%E5%A4%9C%E6%8B%8D%E6%AD%A3%E9%96%80).jpg'
   },
   {
     id: 'lukang_tianhou',
@@ -245,7 +299,10 @@ const TEMPLES = [
     desc: '創建於明末清初，供奉湄洲開基媽祖神像，為鹿港最重要的廟宇。古蹟建築莊嚴肅穆，令人驚嘆。',
     blessing: '海上平安、商業繁榮、家庭和樂',
     color: '#FF4500',
-    icon: '👸'
+    icon: '👸',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/%E9%B9%BF%E6%B8%AF%E5%A4%A9%E5%90%8E%E5%AE%AE.JPG/640px-%E9%B9%BF%E6%B8%AF%E5%A4%A9%E5%90%8E%E5%AE%AE.JPG',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E9%B9%BF%E6%B8%AF%E5%A4%A9%E5%90%8E%E5%AE%AE.JPG'
   },
   {
     id: 'changhua_nanyao',
@@ -256,7 +313,10 @@ const TEMPLES = [
     desc: '創建於清乾隆三年（1738年），為彰化最重要的媽祖廟。十個媽祖會為獨特的信仰組織，笨港進香歷史悠久。',
     blessing: '彰化守護、進香祈福、社區團結',
     color: '#DC143C',
-    icon: '🎪'
+    icon: '🎪',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/%E5%BD%B0%E5%8C%96%E5%8D%97%E7%91%A4%E5%AE%AE_Nanyao_Temple%2C_Zhanghua_-_panoramio.jpg/640px-%E5%BD%B0%E5%8C%96%E5%8D%97%E7%91%A4%E5%AE%AE_Nanyao_Temple%2C_Zhanghua_-_panoramio.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E5%BD%B0%E5%8C%96%E5%8D%97%E7%91%A4%E5%AE%AE_Nanyao_Temple,_Zhanghua_-_panoramio.jpg'
   },
   {
     id: 'zinan',
@@ -267,7 +327,10 @@ const TEMPLES = [
     desc: '位於竹山鎮，全台最知名的求財土地公廟。可「借金」求財，歸還時連本帶利。每逢過年發錢母，排隊人潮可達數公里。',
     blessing: '財源滾滾、借金生財、錢母開運',
     color: '#FFD700',
-    icon: '🤑'
+    icon: '🤑',
+    deityCategory: 'earth',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Zhushan_Zinangong.JPG/640px-Zhushan_Zinangong.JPG',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Zhushan_Zinangong.JPG'
   },
   {
     id: 'nantou_wenwu',
@@ -278,7 +341,10 @@ const TEMPLES = [
     desc: '位於日月潭畔，氣勢宏偉。背山面湖，佔地極廣。年梯步道可尋找自己生日，為中台灣著名廟宇。',
     blessing: '文昌開智、武運亨通、考試順利',
     color: '#DAA520',
-    icon: '📖'
+    icon: '📖',
+    deityCategory: 'confucius',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Remote_views_of_the_Wen_Wu_Temple%2C_Sun_Moon_Lake_03_20251107.jpg/640px-Remote_views_of_the_Wen_Wu_Temple%2C_Sun_Moon_Lake_03_20251107.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Remote_views_of_the_Wen_Wu_Temple,_Sun_Moon_Lake_03_20251107.jpg'
   },
   {
     id: 'zhongtai',
@@ -289,7 +355,10 @@ const TEMPLES = [
     desc: '由惟覺老和尚創建，建築融合中西方設計，高達136公尺，為全台最大、最高的佛教寺院建築。金碧輝煌，莊嚴壯觀。',
     blessing: '禪定智慧、心靈寧靜、福慧雙修',
     color: '#B8860B',
-    icon: '🛕'
+    icon: '🛕',
+    deityCategory: 'buddha',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Chung_Tai_Chan_Monastery_1F_entrance_20080613.jpg/640px-Chung_Tai_Chan_Monastery_1F_entrance_20080613.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Chung_Tai_Chan_Monastery_1F_entrance_20080613.jpg'
   },
   {
     id: 'beigang',
@@ -301,8 +370,9 @@ const TEMPLES = [
     blessing: '媽祖庇佑、炸轎開運、全家平安',
     color: '#FF0000',
     icon: '🧨',
-    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Beigang_Chaotian_Temple_front_2019.jpg/640px-Beigang_Chaotian_Temple_front_2019.jpg',
-    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Beigang_Chaotian_Temple_front_2019.jpg'
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/%E9%9B%B2%E6%9E%97%E5%8C%97%E6%B8%AF%E6%9C%9D%E5%A4%A9%E5%AE%AE-1.jpg/640px-%E9%9B%B2%E6%9E%97%E5%8C%97%E6%B8%AF%E6%9C%9D%E5%A4%A9%E5%AE%AE-1.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E9%9B%B2%E6%9E%97%E5%8C%97%E6%B8%AF%E6%9C%9D%E5%A4%A9%E5%AE%AE-1.jpg'
   },
   {
     id: 'xingang',
@@ -313,7 +383,10 @@ const TEMPLES = [
     desc: '創建於清嘉慶十六年（1811年），為大甲媽祖遶境進香終點站。虎爺信仰全台聞名，為少見供於桌上的虎爺。',
     blessing: '媽祖護航、虎爺咬錢、小孩平安',
     color: '#FF6347',
-    icon: '🐯'
+    icon: '🐯',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Singang_Fengtian_Temple_20081012.jpg/640px-Singang_Fengtian_Temple_20081012.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Singang_Fengtian_Temple_20081012.jpg'
   },
   {
     id: 'chiayi_chenghuang',
@@ -324,7 +397,10 @@ const TEMPLES = [
     desc: '創建於清康熙五十四年（1715年），為嘉義市最重要的廟宇之一。城隍夜巡為嘉義獨特的民俗活動。',
     blessing: '陰陽護佑、夜巡平安、邪不勝正',
     color: '#4B0082',
-    icon: '🌙'
+    icon: '🌙',
+    deityCategory: 'chenghuang',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/2022%E5%B9%B4%E7%9A%84%E5%98%89%E7%BE%A9%E5%9F%8E%E9%9A%8D%E5%BB%9F.jpg/640px-2022%E5%B9%B4%E7%9A%84%E5%98%89%E7%BE%A9%E5%9F%8E%E9%9A%8D%E5%BB%9F.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:2022%E5%B9%B4%E7%9A%84%E5%98%89%E7%BE%A9%E5%9F%8E%E9%9A%8D%E5%BB%9F.jpg'
   },
 
   // ======================================================
@@ -339,7 +415,10 @@ const TEMPLES = [
     desc: '為全台規模最大的王爺信仰中心，佔地六萬坪。建築壯觀，每年進香團絡繹不絕。國定古蹟暨國定民俗。',
     blessing: '消災解厄、驅邪避煞、五路財神',
     color: '#FF6347',
-    icon: '👑'
+    icon: '👑',
+    deityCategory: 'wangye',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/%E5%8D%97%E9%AF%A4%E9%AF%93%E4%BB%A3%E5%A4%A9%E5%BA%9C%E7%A5%88%E7%A6%8F%E8%88%87%E9%A6%99%E7%88%90.jpg/640px-%E5%8D%97%E9%AF%A4%E9%AF%93%E4%BB%A3%E5%A4%A9%E5%BA%9C%E7%A5%88%E7%A6%8F%E8%88%87%E9%A6%99%E7%88%90.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E5%8D%97%E9%AF%A4%E9%AF%93%E4%BB%A3%E5%A4%A9%E5%BA%9C%E7%A5%88%E7%A6%8F%E8%88%87%E9%A6%99%E7%88%90.jpg'
   },
   {
     id: 'tainan_tiantan',
@@ -350,7 +429,8 @@ const TEMPLES = [
     desc: '俗稱天公廟，創建於清咸豐四年（1854年）。主祀玉皇上帝，地位崇高，農曆正月初九天公生更是盛況空前。',
     blessing: '天官賜福、萬事如意、國泰民安',
     color: '#FFD700',
-    icon: '☁️'
+    icon: '☁️',
+    deityCategory: 'jade_emperor'
   },
   {
     id: 'tainan_datianhou',
@@ -361,7 +441,10 @@ const TEMPLES = [
     desc: '原為明寧靖王朱術桂府邸，清康熙年間改建為媽祖廟。為全台第一座官建媽祖廟，國定古蹟。月老姻緣聞名。',
     blessing: '官方庇佑、月老牽線、古蹟祈福',
     color: '#DC143C',
-    icon: '🏯'
+    icon: '🏯',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/2010-07-06_Tainan_Grand_Matsu_Temple.jpg/640px-2010-07-06_Tainan_Grand_Matsu_Temple.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:2010-07-06_Tainan_Grand_Matsu_Temple.jpg'
   },
   {
     id: 'tainan_wumiao',
@@ -372,7 +455,10 @@ const TEMPLES = [
     desc: '創建於明永曆年間，為全台唯一列入官方祀典的關帝廟，國定古蹟。與大天后宮相鄰，合稱「大關帝廟」。',
     blessing: '忠義精神、商道興旺、考運亨通',
     color: '#B22222',
-    icon: '📕'
+    icon: '📕',
+    deityCategory: 'guandi',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/%E5%8F%B0%E5%8D%97%E7%A5%80%E5%85%B8%E6%AD%A6%E5%BB%9F.jpg/640px-%E5%8F%B0%E5%8D%97%E7%A5%80%E5%85%B8%E6%AD%A6%E5%BB%9F.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E5%8F%B0%E5%8D%97%E7%A5%80%E5%85%B8%E6%AD%A6%E5%BB%9F.jpg'
   },
   {
     id: 'tainan_confucius',
@@ -383,7 +469,10 @@ const TEMPLES = [
     desc: '創建於明永曆二十年（1666年），為全台第一座孔廟，有「全臺首學」之稱。每年教師節舉辦祭孔大典，莊嚴肅穆。',
     blessing: '學業有成、金榜題名、文運昌隆',
     color: '#8B0000',
-    icon: '📚'
+    icon: '📚',
+    deityCategory: 'confucius',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/%E8%87%BA%E5%8D%97%E5%AD%94%E5%AD%90%E5%BB%9F_%E5%A4%A7%E6%88%90%E5%9D%8A.JPG/640px-%E8%87%BA%E5%8D%97%E5%AD%94%E5%AD%90%E5%BB%9F_%E5%A4%A7%E6%88%90%E5%9D%8A.JPG',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E8%87%BA%E5%8D%97%E5%AD%94%E5%AD%90%E5%BB%9F_%E5%A4%A7%E6%88%90%E5%9D%8A.JPG'
   },
   {
     id: 'anping_matsu',
@@ -394,7 +483,10 @@ const TEMPLES = [
     desc: '台灣最早的媽祖廟之一，見證荷蘭、明鄭至清代的歷史。位於安平老街旁，為府城信仰重鎮。',
     blessing: '開台祈福、歷史庇佑、平安喜樂',
     color: '#E9967A',
-    icon: '⛵'
+    icon: '⛵',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/%E5%AE%89%E5%B9%B3%E9%96%8B%E8%87%BA%E5%A4%A9%E5%90%8E%E5%AE%AE.jpg/640px-%E5%AE%89%E5%B9%B3%E9%96%8B%E8%87%BA%E5%A4%A9%E5%90%8E%E5%AE%AE.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E5%AE%89%E5%B9%B3%E9%96%8B%E8%87%BA%E5%A4%A9%E5%90%8E%E5%AE%AE.jpg'
   },
   {
     id: 'nanying_matou',
@@ -405,7 +497,10 @@ const TEMPLES = [
     desc: '以巨大的巡狩五府千歲神像及觀光地獄、天堂園區聞名。「滾輪式溜滑梯地獄」成為打卡熱點，寓教於樂。',
     blessing: '五王護佑、消災轉運、善惡分明',
     color: '#FF4500',
-    icon: '🔥'
+    icon: '🔥',
+    deityCategory: 'wangye',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Inside_Madou_Daitian_Temple.jpg/640px-Inside_Madou_Daitian_Temple.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Inside_Madou_Daitian_Temple.jpg'
   },
   {
     id: 'foguangshan',
@@ -417,8 +512,9 @@ const TEMPLES = [
     blessing: '智慧增長、慈悲喜捨、煩惱消除',
     color: '#DAA520',
     icon: '🪷',
-    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Fo_Guang_Shan_Buddha_Museum_2019.jpg/640px-Fo_Guang_Shan_Buddha_Museum_2019.jpg',
-    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Fo_Guang_Shan_Buddha_Museum_2019.jpg'
+    deityCategory: 'buddha',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Fo_Guang_Shan_Buddha_Museum_%E4%BD%9B%E5%85%89%E5%B1%B1%E4%BD%9B%E9%99%80%E7%B4%80%E5%BF%B5%E9%A4%A8_.jpg/640px-Fo_Guang_Shan_Buddha_Museum_%E4%BD%9B%E5%85%89%E5%B1%B1%E4%BD%9B%E9%99%80%E7%B4%80%E5%BF%B5%E9%A4%A8_.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Fo_Guang_Shan_Buddha_Museum_%E4%BD%9B%E5%85%89%E5%B1%B1%E4%BD%9B%E9%99%80%E7%B4%80%E5%BF%B5%E9%A4%A8_.jpg'
   },
   {
     id: 'sanfeng',
@@ -429,7 +525,10 @@ const TEMPLES = [
     desc: '為全台最大的太子爺廟，建築雄偉。三太子信仰為台灣獨特民俗，電音三太子更是台灣特有文化現象。',
     blessing: '孩童平安、叛逆轉正、活力充沛',
     color: '#FF1493',
-    icon: '🔱'
+    icon: '🔱',
+    deityCategory: 'nezha',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Kaohsiung_-_Sunfong_Temple_%E4%B8%89%E9%B3%B3%E5%AE%AE_%282026%29_-_img_06.jpg/640px-Kaohsiung_-_Sunfong_Temple_%E4%B8%89%E9%B3%B3%E5%AE%AE_%282026%29_-_img_06.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Kaohsiung_-_Sunfong_Temple_%E4%B8%89%E9%B3%B3%E5%AE%AE_(2026)_-_img_06.jpg'
   },
   {
     id: 'zuoying_ciji',
@@ -440,7 +539,10 @@ const TEMPLES = [
     desc: '位於蓮池潭畔，與龍虎塔、春秋閣相鄰。為高雄左營地區最古老的廟宇，每年萬年季活動熱鬧非凡。',
     blessing: '身體安康、蓮潭福氣、潭水淨心',
     color: '#20B2AA',
-    icon: '🐲'
+    icon: '🐲',
+    deityCategory: 'baosheng',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/2017-10-30_Zuoying_Ciji_Temple.jpg/640px-2017-10-30_Zuoying_Ciji_Temple.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:2017-10-30_Zuoying_Ciji_Temple.jpg'
   },
   {
     id: 'fengshan_chenghuang',
@@ -451,7 +553,8 @@ const TEMPLES = [
     desc: '創建於清乾隆年間，為高雄地區重要的城隍信仰中心。古色古香的建築見證鳳山縣城的歷史。',
     blessing: '公正護佑、陰陽調和、社區平安',
     color: '#696969',
-    icon: '⚖️'
+    icon: '⚖️',
+    deityCategory: 'chenghuang'
   },
   {
     id: 'checheng_fuan',
@@ -462,7 +565,10 @@ const TEMPLES = [
     desc: '號稱全台灣乃至全東南亞最大的土地公廟。每年農曆二月初二土地公生日，信徒湧入「搶頭香」場面壯觀。',
     blessing: '土地庇佑、恆春祈福、四季平安',
     color: '#DAA520',
-    icon: '🏔️'
+    icon: '🏔️',
+    deityCategory: 'earth',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/%E8%BB%8A%E5%9F%8E%E7%A6%8F%E5%AE%89%E5%AE%AE.jpg/640px-%E8%BB%8A%E5%9F%8E%E7%A6%8F%E5%AE%89%E5%AE%AE.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E8%BB%8A%E5%9F%8E%E7%A6%8F%E5%AE%89%E5%AE%AE.jpg'
   },
   {
     id: 'donggang_donglong',
@@ -473,7 +579,10 @@ const TEMPLES = [
     desc: '為東港最重要的王爺廟。每三年一科的「迎王平安祭典」（燒王船）為國家重要民俗，場面壯觀震撼。',
     blessing: '王爺巡狩、瘟疫退散、平安迎王',
     color: '#FF8C00',
-    icon: '🚢'
+    icon: '🚢',
+    deityCategory: 'wangye',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/%E6%9D%B1%E6%B8%AF%E6%9D%B1%E9%9A%86%E5%AE%AE.JPG/640px-%E6%9D%B1%E6%B8%AF%E6%9D%B1%E9%9A%86%E5%AE%AE.JPG',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E6%9D%B1%E6%B8%AF%E6%9D%B1%E9%9A%86%E5%AE%AE.JPG'
   },
 
   // ======================================================
@@ -488,7 +597,8 @@ const TEMPLES = [
     desc: '為全台慈惠堂總堂，主祀瑤池金母。座落於花蓮市郊，依山傍海，靈氣十足。全台分堂逾千座。',
     blessing: '靈性提升、心靈淨化、母儀天下',
     color: '#9370DB',
-    icon: '✨'
+    icon: '✨',
+    deityCategory: 'yaochi'
   },
   {
     id: 'hualien_jian',
@@ -499,7 +609,10 @@ const TEMPLES = [
     desc: '日治時期建造的真言宗寺院，為花蓮唯一的國定古蹟日式佛寺。八十八尊石佛環繞，融合日本與台灣文化。',
     blessing: '古蹟靜心、文化巡禮、身心安頓',
     color: '#708090',
-    icon: '⛩️'
+    icon: '⛩️',
+    deityCategory: 'buddha',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Jian_Qianxiuyuan_Temple_%E5%90%89%E5%AE%89%E6%85%B6%E4%BF%AE%E9%99%A2_-_panoramio.jpg/640px-Jian_Qianxiuyuan_Temple_%E5%90%89%E5%AE%89%E6%85%B6%E4%BF%AE%E9%99%A2_-_panoramio.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Jian_Qianxiuyuan_Temple_%E5%90%89%E5%AE%89%E6%85%B6%E4%BF%AE%E9%99%A2_-_panoramio.jpg'
   },
   {
     id: 'taitung_tianhou',
@@ -510,7 +623,10 @@ const TEMPLES = [
     desc: '台東地區最重要的媽祖廟。每年元宵「炸寒單爺」為一大奇觀——真人肉身站在轎上接受鞭炮轟炸，驚心動魄。',
     blessing: '後山庇佑、勇氣加持、炸出好運',
     color: '#FF8C00',
-    icon: '🧨'
+    icon: '🧨',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/%E8%87%BA%E6%9D%B1%E5%B8%82%E5%A4%A9%E5%90%8E%E5%AE%AE.jpg/640px-%E8%87%BA%E6%9D%B1%E5%B8%82%E5%A4%A9%E5%90%8E%E5%AE%AE.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:%E8%87%BA%E6%9D%B1%E5%B8%82%E5%A4%A9%E5%90%8E%E5%AE%AE.jpg'
   },
   {
     id: 'penghu_tianhou',
@@ -521,7 +637,10 @@ const TEMPLES = [
     desc: '台灣歷史最悠久的媽祖廟，創建於明萬曆年間（1604年前），為國定古蹟。廟中保存珍貴的「沈有容諭退紅毛番韋麻郎等」碑。',
     blessing: '離島守護、海天祝福、歷史傳承',
     color: '#4682B4',
-    icon: '🏝️'
+    icon: '🏝️',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Penghu_Tianhougong_20150618.jpg/640px-Penghu_Tianhougong_20150618.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Penghu_Tianhougong_20150618.jpg'
   },
   {
     id: 'kinmen_tianhou',
@@ -532,7 +651,8 @@ const TEMPLES = [
     desc: '位於料羅灣畔，為金門最重要的媽祖廟之一。見證金門戰地歷史，媽祖庇佑離島軍民平安。',
     blessing: '戰地和平、離島昌盛、軍民平安',
     color: '#556B2F',
-    icon: '🏰'
+    icon: '🏰',
+    deityCategory: 'mazu'
   },
   {
     id: 'matsu_tianhou',
@@ -543,7 +663,10 @@ const TEMPLES = [
     desc: '相傳媽祖林默娘遺體漂流至馬祖，居民厚葬建廟。廟中有媽祖靈穴（衣冠塚），為媽祖信仰最神聖之地。',
     blessing: '靈穴祈福、海峽平安、思鄉慰藉',
     color: '#2E8B57',
-    icon: '🌅'
+    icon: '🌅',
+    deityCategory: 'mazu',
+    photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Magang_Tianhou_Temple_20130506.jpg/640px-Magang_Tianhou_Temple_20130506.jpg',
+    photoCreditUrl: 'https://commons.wikimedia.org/wiki/File:Magang_Tianhou_Temple_20130506.jpg'
   }
 ];
 

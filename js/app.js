@@ -163,7 +163,7 @@ function bindEvents() {
 
   // Reset button
   document.getElementById('resetBtn')?.addEventListener('click', () => {
-    if (confirm('確定要重新開始嗎？\n所有拜過的紀錄和香油錢都會清除喔。')) {
+    if (confirm('確定要重新開始嗎？\n所有拜過的紀錄和祈福點數都會清除喔。')) {
       state.visited.clear();
       state.donations = {};
       state.totalDonation = 0;
@@ -200,6 +200,12 @@ function openTemple(temple) {
   document.getElementById('templeName').textContent = temple.name;
   document.getElementById('templeMeta').textContent = `${temple.city} · ${temple.deity}`;
   document.getElementById('templeDesc').textContent = temple.desc;
+
+  // Per-temple disclaimer
+  const disclaimerEl = document.getElementById('templeDisclaimer');
+  if (disclaimerEl) {
+    disclaimerEl.textContent = `⚠️ 趣味模擬，與「${temple.name}」無任何官方關係，不涉及真實金錢交易`;
+  }
 
   // Blessings
   const blessingContainer = document.getElementById('templeBlessings');
@@ -462,18 +468,18 @@ function doDonation() {
   donationUI.innerHTML = `
     <div class="donation-box">
       <div class="donation-box-icon">🏺</div>
-      <div class="donation-box-label">功德箱</div>
+      <div class="donation-box-label">虛擬功德箱</div>
       <div class="coin-landing-zone" id="coinLandingZone"></div>
     </div>
-    <p class="donation-temple-total">這間廟已添的香油錢：<span class="gold-text" id="templeDonationAmt">${prevDonation.toLocaleString()}</span> 元</p>
-    <p class="donation-prompt">選一個金額，誠心添油香：</p>
+    <p class="donation-temple-total">這間廟已添的祈福點數：<span class="gold-text" id="templeDonationAmt">${prevDonation.toLocaleString()}</span> 點</p>
+    <p class="donation-prompt">選一個點數，誠心添油香（純趣味，非真實金錢）：</p>
     <div class="donation-amounts">
-      <button class="donation-amt-btn" data-amt="10">🪙 10 元</button>
-      <button class="donation-amt-btn" data-amt="50">🪙 50 元</button>
-      <button class="donation-amt-btn" data-amt="100">💵 100 元</button>
-      <button class="donation-amt-btn" data-amt="500">💵 500 元</button>
-      <button class="donation-amt-btn" data-amt="1000">💴 1,000 元</button>
-      <button class="donation-amt-btn" data-amt="5000">💎 5,000 元</button>
+      <button class="donation-amt-btn" data-amt="10">🪙 10 點</button>
+      <button class="donation-amt-btn" data-amt="50">🪙 50 點</button>
+      <button class="donation-amt-btn" data-amt="100">💵 100 點</button>
+      <button class="donation-amt-btn" data-amt="500">💵 500 點</button>
+      <button class="donation-amt-btn" data-amt="1000">💴 1,000 點</button>
+      <button class="donation-amt-btn" data-amt="5000">💎 5,000 點</button>
     </div>
     <div class="donation-custom">
       <input type="number" id="customDonationAmt" class="donation-input" placeholder="自訂金額" min="1" max="999999">
@@ -532,7 +538,7 @@ function processDonation(amount) {
 
   // ===== 過年走春特效 — 根據金額分級 =====
   if (amount >= 5000) {
-    // 🐉 超級大功德主 — 全特效齊發！
+    // 🐉 超級大功德主 — 全特效齊發 + 主神主題特效！
     state.fireworks.start();
     state.fireworks.burst(8);
     state.falling.drop(40);
@@ -546,6 +552,8 @@ function processDonation(amount) {
       setTimeout(() => createFloatingBlessing(amount), i * 400);
     }
     setTimeout(() => createDragonEffect(), 500);
+    // 主神主題特效
+    setTimeout(() => createDeityThemedEffect(temple), 300);
     // 持續煙火
     let burstCount = 0;
     const sustainedFireworks = setInterval(() => {
@@ -741,6 +749,205 @@ function createBlessingBanner(amount) {
   const banner = document.createElement('div');
   banner.className = 'blessing-banner';
   banner.textContent = msg;
+  document.body.appendChild(banner);
+  banner.addEventListener('animationend', () => banner.remove());
+}
+
+/** 主神主題特效 — 根據 deityCategory 顯示不同主題的滿屏吸睛特效 */
+function createDeityThemedEffect(temple) {
+  const cat = temple.deityCategory || 'other';
+  const themes = {
+    mazu: {
+      name: '媽祖',
+      emojis: ['🌊', '⛵', '🧜‍♀️', '🌅', '🐚', '🪸'],
+      chars: ['媽', '祖', '慈', '航', '海', '佑'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(0,100,200,0.25), rgba(255,215,0,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(0,150,255,0.3), rgba(255,215,0,0.1), transparent 60%)',
+      color: '#4fc3f7',
+      title: '🌊 媽祖庇佑 · 海不揚波 · 天上聖母賜福 🌊'
+    },
+    guanyin: {
+      name: '觀音',
+      emojis: ['🪷', '☁️', '✨', '🌸', '💮', '🕊️'],
+      chars: ['慈', '悲', '觀', '音', '蓮', '淨'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(255,255,255,0.2), rgba(255,182,193,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(255,255,255,0.3), rgba(255,192,203,0.1), transparent 60%)',
+      color: '#fff0f5',
+      title: '🪷 觀音慈悲 · 蓮花淨土 · 大慈大悲觀世音 🪷'
+    },
+    guandi: {
+      name: '關帝',
+      emojis: ['⚔️', '🗡️', '🐴', '🏴', '🔥', '🛡️'],
+      chars: ['忠', '義', '關', '帝', '武', '勇'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(200,0,0,0.25), rgba(255,215,0,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(220,20,20,0.3), rgba(255,165,0,0.1), transparent 60%)',
+      color: '#ff4444',
+      title: '⚔️ 關聖帝君 · 義薄雲天 · 武聖護國 ⚔️'
+    },
+    buddha: {
+      name: '佛祖',
+      emojis: ['🪷', '☸️', '🙏', '✨', '🌟', '💛'],
+      chars: ['佛', '光', '般', '若', '禪', '定'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(255,215,0,0.3), rgba(255,255,255,0.1), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(255,215,0,0.35), rgba(255,200,0,0.1), transparent 60%)',
+      color: '#ffd700',
+      title: '☸️ 佛光普照 · 般若智慧 · 功德圓滿 ☸️'
+    },
+    wangye: {
+      name: '王爺',
+      emojis: ['🔥', '⛵', '🎏', '🏮', '🧨', '⚡'],
+      chars: ['王', '爺', '代', '天', '巡', '狩'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(255,100,0,0.25), rgba(255,0,0,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(255,120,0,0.3), rgba(255,50,0,0.1), transparent 60%)',
+      color: '#ff6600',
+      title: '🔥 代天巡狩 · 王爺駕到 · 鑑察善惡 🔥'
+    },
+    chenghuang: {
+      name: '城隍',
+      emojis: ['⚖️', '👁️', '🏛️', '📜', '🔔', '🌙'],
+      chars: ['城', '隍', '鑑', '察', '善', '惡'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(100,0,150,0.2), rgba(255,215,0,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(128,0,128,0.25), rgba(255,215,0,0.1), transparent 60%)',
+      color: '#bb86fc',
+      title: '⚖️ 城隍鑑察 · 善惡分明 · 護國佑民 ⚖️'
+    },
+    confucius: {
+      name: '孔子',
+      emojis: ['📚', '🎓', '📜', '🖊️', '🏫', '🎋'],
+      chars: ['仁', '義', '禮', '智', '信', '學'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(0,80,180,0.2), rgba(255,215,0,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(30,100,200,0.25), rgba(255,215,0,0.1), transparent 60%)',
+      color: '#64b5f6',
+      title: '📚 至聖先師 · 有教無類 · 文運昌隆 📚'
+    },
+    earth: {
+      name: '土地公',
+      emojis: ['💰', '🪙', '🌾', '🏡', '🌳', '🎋'],
+      chars: ['福', '德', '財', '旺', '土', '地'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(200,150,50,0.25), rgba(0,128,0,0.1), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(200,170,50,0.3), rgba(100,200,50,0.1), transparent 60%)',
+      color: '#daa520',
+      title: '💰 土地公福德正神 · 招財進寶 · 五穀豐登 💰'
+    },
+    daoist: {
+      name: '道教神仙',
+      emojis: ['☯️', '🌙', '⛰️', '🍑', '🏔️', '✨'],
+      chars: ['道', '仙', '清', '靜', '無', '為'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(0,50,100,0.2), rgba(200,200,255,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(100,150,255,0.25), rgba(200,200,255,0.1), transparent 60%)',
+      color: '#90caf9',
+      title: '☯️ 道法自然 · 清靜無為 · 仙風道骨 ☯️'
+    },
+    baosheng: {
+      name: '保生大帝',
+      emojis: ['💊', '🏥', '🌿', '💚', '☘️', '🍃'],
+      chars: ['保', '生', '醫', '神', '康', '健'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(0,150,80,0.2), rgba(255,255,255,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(0,180,100,0.25), rgba(200,255,200,0.1), transparent 60%)',
+      color: '#66bb6a',
+      title: '🌿 保生大帝 · 醫神庇佑 · 身體安康 🌿'
+    },
+    jade_emperor: {
+      name: '玉皇大帝',
+      emojis: ['👑', '☁️', '🌩️', '⚡', '🌟', '🏯'],
+      chars: ['天', '公', '玉', '皇', '至', '尊'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(255,215,0,0.35), rgba(255,255,255,0.2), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(255,215,0,0.4), rgba(255,255,255,0.15), transparent 60%)',
+      color: '#ffd700',
+      title: '👑 天公玉皇至尊 · 統御萬靈 · 恩澤蒼生 👑'
+    },
+    nezha: {
+      name: '哪吒',
+      emojis: ['🔥', '💨', '🏮', '🛞', '⚡', '🌀'],
+      chars: ['哪', '吒', '風', '火', '輪', '勇'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(255,50,0,0.25), rgba(255,200,0,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(255,100,0,0.3), rgba(255,200,50,0.1), transparent 60%)',
+      color: '#ff5722',
+      title: '🔥 三太子哪吒 · 風火少年 · 驅邪鎮煞 🔥'
+    },
+    yaochi: {
+      name: '瑤池金母',
+      emojis: ['🍑', '👸', '🌸', '🦚', '🌺', '💜'],
+      chars: ['瑤', '池', '金', '母', '仙', '桃'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(200,100,255,0.2), rgba(255,192,203,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(200,100,255,0.25), rgba(255,182,193,0.1), transparent 60%)',
+      color: '#ce93d8',
+      title: '🍑 瑤池金母 · 仙桃壽宴 · 母娘慈恩 🍑'
+    },
+    yimin: {
+      name: '義民爺',
+      emojis: ['🏴', '⚔️', '🐂', '🏮', '🎏', '🔥'],
+      chars: ['義', '民', '忠', '勇', '護', '鄉'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(100,0,0,0.2), rgba(255,200,0,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(150,20,20,0.25), rgba(255,165,0,0.1), transparent 60%)',
+      color: '#ef5350',
+      title: '🏴 義民忠魂 · 護鄉保土 · 忠勇可嘉 🏴'
+    },
+    zushi: {
+      name: '清水祖師',
+      emojis: ['🌧️', '⛰️', '☁️', '🌊', '🐍', '🏯'],
+      chars: ['祖', '師', '清', '水', '落', '鼻'],
+      overlayBg: 'radial-gradient(ellipse at center, rgba(0,100,150,0.2), rgba(200,200,200,0.15), transparent 70%)',
+      waveBg: 'radial-gradient(circle, rgba(50,150,200,0.25), rgba(200,220,255,0.1), transparent 60%)',
+      color: '#4dd0e1',
+      title: '⛰️ 清水祖師 · 落鼻祖師 · 除煞鎮邪 ⛰️'
+    }
+  };
+
+  const theme = themes[cat] || themes.mazu;
+
+  // 1. Radial overlay pulse
+  const overlay = document.createElement('div');
+  overlay.className = 'deity-mega-overlay';
+  overlay.style.background = theme.overlayBg;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('animationend', () => overlay.remove());
+
+  // 2. Expanding wave
+  const wave = document.createElement('div');
+  wave.className = 'deity-mega-wave';
+  wave.style.background = theme.waveBg;
+  document.body.appendChild(wave);
+  wave.addEventListener('animationend', () => wave.remove());
+
+  // 3. Themed emoji shower (staggered, from all directions)
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'deity-mega-char';
+      el.textContent = theme.emojis[Math.floor(Math.random() * theme.emojis.length)];
+      el.style.left = (5 + Math.random() * 90) + '%';
+      el.style.top = (10 + Math.random() * 70) + '%';
+      el.style.color = theme.color;
+      el.style.fontSize = (2.5 + Math.random() * 3) + 'rem';
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }, i * 150);
+  }
+
+  // 4. Themed character rain (deity-specific Chinese chars)
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'fortune-char';
+      el.textContent = theme.chars[Math.floor(Math.random() * theme.chars.length)];
+      el.style.left = (5 + Math.random() * 90) + '%';
+      el.style.bottom = '0';
+      el.style.fontSize = (1.5 + Math.random() * 2.5) + 'rem';
+      el.style.color = theme.color;
+      el.style.textShadow = `0 0 20px ${theme.color}`;
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }, 300 + i * 200);
+  }
+
+  // 5. Themed blessing banner
+  const banner = document.createElement('div');
+  banner.className = 'blessing-banner';
+  banner.textContent = theme.title;
+  banner.style.background = `linear-gradient(90deg, transparent, ${theme.color}33, ${theme.color}55, ${theme.color}33, transparent)`;
+  banner.style.color = theme.color;
+  banner.style.textShadow = `0 0 15px ${theme.color}`;
   document.body.appendChild(banner);
   banner.addEventListener('animationend', () => banner.remove());
 }
