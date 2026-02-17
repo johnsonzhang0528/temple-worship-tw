@@ -60,7 +60,7 @@ function renderTemples() {
     const header = document.createElement('div');
     header.className = 'region-header';
     header.id = `region-${regionKey}`;
-    header.innerHTML = `${region.icon} ${region.name} <small style="font-size:0.8rem;color:#b0a090;">— ${region.cities}</small>`;
+    header.innerHTML = `${region.icon} ${region.name} <small style="font-size:0.85rem;color:#c8b090;">— ${region.cities}</small>`;
     container.appendChild(header);
 
     const grid = document.createElement('div');
@@ -154,7 +154,7 @@ function bindEvents() {
 
   // Reset button
   document.getElementById('resetBtn')?.addEventListener('click', () => {
-    if (confirm('確定要重新開始走春之旅嗎？所有集章紀錄與香油錢將會清除。')) {
+    if (confirm('確定要重新開始嗎？\n所有拜過的紀錄和香油錢都會清除喔。')) {
       state.visited.clear();
       state.donations = {};
       state.totalDonation = 0;
@@ -224,8 +224,8 @@ function resetWorshipArea() {
   document.getElementById('btnFortune').classList.remove('completed');
 
   stepArea.innerHTML = `
-    <p style="color: #b0a090; font-size: 1.1rem;">
-      ${isVisited ? '✅ 已參拜過此廟宇，可再次擲筊或抽籤' : '🙏 點擊「上香參拜」開始參拜流程'}
+    <p style="color: #c8b090; font-size: 1.15rem; line-height: 2;">
+      ${isVisited ? '✅ 這間廟已經拜過了，還可以再擲筊或抽籤喔' : '🙏 按上面的「上香參拜」就可以開始拜拜囉'}
     </p>
   `;
 
@@ -241,7 +241,7 @@ async function doIncense() {
   const btn = document.getElementById('btnIncense');
   btn.disabled = true;
 
-  stepArea.innerHTML = '<p style="color: var(--gold); font-size: 1.1rem;">🕯️ 點燃三炷清香...</p>';
+  stepArea.innerHTML = '<p style="color: var(--gold); font-size: 1.15rem; line-height: 2;">🕯️ 正在幫您點燃三炷清香...</p>';
 
   setTimeout(() => {
     stepArea.innerHTML = '';
@@ -276,12 +276,12 @@ async function doIncense() {
     // Three bows
     let bowCount = 0;
     const bowText = document.createElement('p');
-    bowText.style.cssText = 'color: var(--gold); font-size: 1.2rem; margin-top: 1rem; font-family: var(--font-display);';
+    bowText.style.cssText = 'color: var(--gold); font-size: 1.3rem; margin-top: 1rem; font-family: var(--font-display); line-height: 2;';
     stepArea.appendChild(bowText);
 
     const bowInterval = setInterval(() => {
       bowCount++;
-      bowText.textContent = `🙏 第 ${bowCount} 拜...`;
+      bowText.textContent = `🙏 第 ${bowCount} 拜...虔誠行禮中`;
       holder.style.animation = 'bowAnim 0.6s ease-in-out';
       setTimeout(() => holder.style.animation = '', 600);
 
@@ -289,7 +289,7 @@ async function doIncense() {
         clearInterval(bowInterval);
         setTimeout(() => {
           smoke.stop();
-          bowText.innerHTML = '✅ <span style="color: #4CAF50;">參拜完成！心誠則靈 🙏</span>';
+          bowText.innerHTML = '✅ <span style="color: #4CAF50; font-size: 1.4rem;">參拜完成！心誠則靈 🙏</span>';
           btn.classList.add('completed');
           btn.textContent = '✅ 已參拜';
 
@@ -315,13 +315,13 @@ async function doIncense() {
           }, 4000);
         }, 500);
       }
-    }, 1200);
+    }, 1800);
   }, 800);
 }
 
 async function doJiaoBei() {
   const stepArea = document.getElementById('stepArea');
-  stepArea.innerHTML = '<p style="color: var(--gold); font-size: 1.2rem; font-family: var(--font-display);">🙏 虔心擲筊中...</p>';
+  stepArea.innerHTML = '<p style="color: var(--gold); font-size: 1.3rem; font-family: var(--font-display); line-height: 2;">🙏 誠心向神明擲筊中...</p>';
 
   const animContainer = document.createElement('div');
   animContainer.className = 'jiaobei-animation';
@@ -332,8 +332,8 @@ async function doJiaoBei() {
   jiao2.className = 'jiaobei-piece';
   jiao1.innerHTML = '🌙';
   jiao2.innerHTML = '🌙';
-  jiao1.style.animation = 'tossLeft 1.5s ease-out';
-  jiao2.style.animation = 'tossRight 1.5s ease-out';
+  jiao1.style.animation = 'tossLeft 2s ease-out';
+  jiao2.style.animation = 'tossRight 2s ease-out';
   animContainer.appendChild(jiao1);
   animContainer.appendChild(jiao2);
   stepArea.appendChild(animContainer);
@@ -361,7 +361,7 @@ async function doJiaoBei() {
       <div class="result-icon">${resultInfo.icon}</div>
       <div class="result-name ${resultInfo.css}">${resultInfo.name}！</div>
       <div class="result-desc">${resultInfo.desc}</div>
-      <button class="worship-btn" style="margin-top: 1rem;" onclick="doJiaoBei()">🔄 再擲一次</button>
+      <button class="worship-btn" style="margin-top: 1rem;" onclick="doJiaoBei()">🔄 再擲一次看看</button>
     `;
     stepArea.appendChild(resultDiv);
 
@@ -373,12 +373,12 @@ async function doJiaoBei() {
         if (state.fireworks.particles.length === 0) state.fireworks.stop();
       }, 3000);
     }
-  }, 1600);
+  }, 2000);
 }
 
 async function doFortune() {
   const stepArea = document.getElementById('stepArea');
-  stepArea.innerHTML = '<p style="color: var(--gold); font-size: 1.2rem; font-family: var(--font-display);">🎋 搖晃籤筒中...</p>';
+  stepArea.innerHTML = '<p style="color: var(--gold); font-size: 1.3rem; font-family: var(--font-display); line-height: 2;">🎋 正在幫您搖籤筒...</p>';
 
   // Lot tube animation
   const lotContainer = document.createElement('div');
@@ -395,7 +395,7 @@ async function doFortune() {
   }
   lotContainer.appendChild(tube);
   stepArea.appendChild(lotContainer);
-  tube.style.animation = 'shakeTube 2s ease-in-out';
+  tube.style.animation = 'shakeTube 2.5s ease-in-out';
 
   setTimeout(() => {
     const fortune = drawFortune();
@@ -414,7 +414,7 @@ async function doFortune() {
         </div>
       </div>
       <div class="lucky-advice">🧧 開運建議：${advice}</div>
-      <button class="worship-btn" style="margin-top: 1rem;" onclick="doFortune()">🔄 再抽一次</button>
+      <button class="worship-btn" style="margin-top: 1rem;" onclick="doFortune()">🔄 再抽一支看看</button>
     `;
     stepArea.appendChild(resultDiv);
 
@@ -429,7 +429,7 @@ async function doFortune() {
     } else {
       state.falling.drop(8);
     }
-  }, 2500);
+  }, 3000);
 }
 
 // ===== Donation (香油錢) =====
@@ -447,8 +447,8 @@ function doDonation() {
       <div class="donation-box-label">功德箱</div>
       <div class="coin-landing-zone" id="coinLandingZone"></div>
     </div>
-    <p class="donation-temple-total">本廟已添香油錢：<span class="gold-text" id="templeDonationAmt">${prevDonation.toLocaleString()}</span> 元</p>
-    <p class="donation-prompt">選擇金額，誠心添香油：</p>
+    <p class="donation-temple-total">這間廟已添的香油錢：<span class="gold-text" id="templeDonationAmt">${prevDonation.toLocaleString()}</span> 元</p>
+    <p class="donation-prompt">選一個金額，誠心添油香：</p>
     <div class="donation-amounts">
       <button class="donation-amt-btn" data-amt="10">🪙 10 元</button>
       <button class="donation-amt-btn" data-amt="50">🪙 50 元</button>

@@ -1,6 +1,6 @@
 /* ============================================
    全台廟宇一鍵參拜 — 走春拜拜不出門
-   主要樣式
+   主要樣式（長輩友善版）
    ============================================ */
 
 /* === CSS Variables === */
@@ -12,11 +12,13 @@
   --lantern-red: #DC143C;
   --bg-dark: #1a0a0a;
   --bg-gradient: linear-gradient(180deg, #1a0a0a 0%, #2d0e0e 50%, #1a0a0a 100%);
-  --text-light: #FAEBD7;
+  --text-light: #FFF3E0;
   --text-gold: #FFD700;
   --shadow-glow: 0 0 20px rgba(255, 215, 0, 0.3);
   --font-main: 'Noto Serif TC', 'Microsoft JhengHei', serif;
   --font-display: 'Ma Shan Zheng', 'Noto Serif TC', cursive;
+  --btn-min-height: 56px;
+  --touch-target: 48px;
 }
 
 /* === Reset & Base === */
@@ -24,7 +26,7 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 body {
@@ -33,7 +35,9 @@ body {
   color: var(--text-light);
   min-height: 100vh;
   overflow-x: hidden;
-  line-height: 1.8;
+  line-height: 2;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(255, 215, 0, 0.2);
 }
 
 /* === Firework Canvas === */
@@ -108,7 +112,7 @@ body {
 }
 
 .lantern {
-  font-size: 4rem;
+  font-size: 4.5rem;
   filter: drop-shadow(0 0 15px rgba(255, 69, 0, 0.6));
   animation: lanternGlow 2s ease-in-out infinite alternate;
 }
@@ -120,20 +124,21 @@ body {
 
 .landing h1 {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 6vw, 4.5rem);
+  font-size: clamp(2.2rem, 7vw, 5rem);
   color: var(--gold);
   text-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 4px 8px rgba(0,0,0,0.5);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
   position: relative;
   z-index: 1;
 }
 
 .landing .subtitle {
-  font-size: clamp(1rem, 2.5vw, 1.4rem);
-  color: #e8c9a0;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: #f0d8b0;
   margin-bottom: 2rem;
   position: relative;
   z-index: 1;
+  line-height: 2;
 }
 
 .couplet-container {
@@ -184,24 +189,25 @@ body {
 
 .start-btn {
   font-family: var(--font-display);
-  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
   color: var(--gold);
   background: linear-gradient(135deg, var(--dark-red), #a00);
-  border: 2px solid var(--gold);
-  padding: 1rem 3rem;
+  border: 3px solid var(--gold);
+  padding: 1.2rem 3.5rem;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
   position: relative;
   z-index: 1;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.3em;
+  min-height: var(--btn-min-height);
 }
 
-.start-btn:hover {
+.start-btn:hover, .start-btn:active {
   background: linear-gradient(135deg, #a00, #c00);
-  box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
-  transform: scale(1.05);
+  box-shadow: 0 0 50px rgba(255, 215, 0, 0.7);
+  transform: scale(1.08);
 }
 
 /* Scroll hint */
@@ -209,13 +215,13 @@ body {
   position: absolute;
   bottom: 2rem;
   animation: bounce 2s ease-in-out infinite;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: var(--dark-gold);
   z-index: 1;
 }
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-12px); }
 }
 
 /* === Navigation Bar === */
@@ -224,7 +230,7 @@ body {
   top: 0;
   z-index: 100;
   background: linear-gradient(90deg, #2d0e0e, #4a1515, #2d0e0e);
-  border-bottom: 2px solid var(--dark-gold);
+  border-bottom: 3px solid var(--dark-gold);
   display: flex;
   justify-content: center;
   gap: 0.5rem;
@@ -237,25 +243,28 @@ body {
   font-family: var(--font-main);
   background: transparent;
   color: var(--text-light);
-  border: 1px solid rgba(255, 215, 0, 0.3);
-  padding: 0.5rem 1.2rem;
+  border: 2px solid rgba(255, 215, 0, 0.35);
+  padding: 0.6rem 1.4rem;
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
+  min-height: var(--touch-target);
+  display: flex;
+  align-items: center;
 }
 
-.nav-btn:hover, .nav-btn.active {
+.nav-btn:hover, .nav-btn:active, .nav-btn.active {
   background: var(--dark-red);
   border-color: var(--gold);
   color: var(--gold);
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
 }
 
 /* === Progress Bar (集章) === */
 .progress-section {
   background: linear-gradient(90deg, #2d0e0e, #3a1515, #2d0e0e);
-  padding: 1rem 2rem;
+  padding: 1.2rem 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -265,42 +274,44 @@ body {
 }
 
 .progress-label {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: var(--gold);
+  font-weight: bold;
 }
 
 .progress-bar {
-  width: 200px;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
+  width: 220px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
   overflow: hidden;
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  border: 2px solid rgba(255, 215, 0, 0.35);
 }
 
 .progress-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--gold), #FFA500);
-  border-radius: 6px;
+  border-radius: 8px;
   transition: width 0.5s ease;
   width: 0%;
 }
 
 .stamp-count {
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   color: var(--text-light);
+  font-weight: bold;
 }
 
 /* === Temple Grid === */
 .temple-section {
-  padding: 3rem 2rem;
+  padding: 2.5rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .section-title {
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
   color: var(--gold);
   text-align: center;
   margin-bottom: 2rem;
@@ -309,30 +320,31 @@ body {
 
 .region-header {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: var(--gold);
-  margin: 2rem 0 1rem;
-  padding-left: 0.5rem;
-  border-left: 4px solid var(--gold);
+  margin: 2.5rem 0 1.2rem;
+  padding-left: 0.8rem;
+  border-left: 5px solid var(--gold);
   padding-bottom: 0.3rem;
 }
 
 .temple-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .temple-card {
   background: linear-gradient(145deg, #2d1515, #1a0808);
-  border: 1px solid rgba(255, 215, 0, 0.2);
-  border-radius: 16px;
-  padding: 1.5rem;
+  border: 2px solid rgba(255, 215, 0, 0.25);
+  border-radius: 20px;
+  padding: 1.8rem;
   cursor: pointer;
   transition: all 0.3s;
   position: relative;
   overflow: hidden;
+  min-height: 140px;
 }
 
 .temple-card::before {
@@ -356,33 +368,33 @@ body {
 }
 
 .temple-card .icon {
-  font-size: 2.5rem;
+  font-size: 3rem;
   margin-bottom: 0.5rem;
 }
 
 .temple-card .name {
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   color: var(--gold);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
 }
 
 .temple-card .city {
-  font-size: 0.85rem;
-  color: #b0a090;
+  font-size: 1rem;
+  color: #c8b090;
   margin-bottom: 0.5rem;
 }
 
 .temple-card .deity {
-  font-size: 0.95rem;
-  color: #e8c9a0;
+  font-size: 1.05rem;
+  color: #f0d8b0;
 }
 
 .temple-card .stamp-badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 1.5rem;
+  top: 14px;
+  right: 14px;
+  font-size: 1.8rem;
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -402,11 +414,11 @@ body {
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.88);
   z-index: 1000;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 .modal-overlay.active {
@@ -415,11 +427,11 @@ body {
 
 .modal {
   background: linear-gradient(180deg, #2d1010 0%, #1a0505 100%);
-  border: 2px solid var(--dark-gold);
-  border-radius: 20px;
-  max-width: 600px;
+  border: 3px solid var(--dark-gold);
+  border-radius: 24px;
+  max-width: 650px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 92vh;
   overflow-y: auto;
   position: relative;
   box-shadow: 0 0 60px rgba(255, 215, 0, 0.2);
@@ -427,12 +439,12 @@ body {
 
 .modal-header {
   text-align: center;
-  padding: 2rem 2rem 1rem;
-  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+  padding: 2rem 2rem 1.2rem;
+  border-bottom: 2px solid rgba(255, 215, 0, 0.2);
 }
 
 .modal-header .temple-icon {
-  font-size: 4rem;
+  font-size: 5rem;
   display: block;
   margin-bottom: 0.5rem;
 }
@@ -440,50 +452,60 @@ body {
 .modal-header h2 {
   font-family: var(--font-display);
   color: var(--gold);
-  font-size: 1.8rem;
+  font-size: 2.2rem;
 }
 
 .modal-header .temple-meta {
-  color: #b0a090;
-  font-size: 0.9rem;
-  margin-top: 0.3rem;
+  color: #c8b090;
+  font-size: 1.1rem;
+  margin-top: 0.4rem;
 }
 
 .modal-close {
   position: absolute;
-  top: 15px;
-  right: 20px;
-  font-size: 1.5rem;
+  top: 12px;
+  right: 16px;
+  font-size: 2rem;
   color: var(--text-light);
-  background: none;
-  border: none;
+  background: rgba(139, 0, 0, 0.6);
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   z-index: 10;
-  opacity: 0.7;
-  transition: opacity 0.3s;
+  opacity: 0.9;
+  transition: all 0.3s;
 }
-.modal-close:hover { opacity: 1; }
+.modal-close:hover, .modal-close:active {
+  opacity: 1;
+  background: rgba(200, 0, 0, 0.8);
+  border-color: var(--gold);
+}
 
 .modal-body {
   padding: 1.5rem 2rem 2rem;
 }
 
 .temple-desc {
-  color: #d4b896;
+  color: #e8d0a8;
   margin-bottom: 1.5rem;
-  line-height: 1.8;
-  font-size: 0.95rem;
+  line-height: 2;
+  font-size: 1.05rem;
 }
 
 .blessing-tag {
   display: inline-block;
-  background: rgba(255, 215, 0, 0.1);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  background: rgba(255, 215, 0, 0.12);
+  border: 2px solid rgba(255, 215, 0, 0.35);
   color: var(--gold);
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  margin: 0.2rem;
+  padding: 0.4rem 1rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  margin: 0.3rem;
 }
 
 /* Worship Steps */
@@ -502,26 +524,28 @@ body {
 
 .worship-btn {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--gold);
   background: linear-gradient(135deg, var(--dark-red), #800);
-  border: 2px solid var(--dark-gold);
-  padding: 0.8rem 2rem;
-  border-radius: 30px;
+  border: 3px solid var(--dark-gold);
+  padding: 1rem 2.2rem;
+  border-radius: 35px;
   cursor: pointer;
   transition: all 0.3s;
   margin: 0.5rem;
-  min-width: 140px;
+  min-width: 160px;
+  min-height: var(--btn-min-height);
+  letter-spacing: 0.05em;
 }
 
-.worship-btn:hover:not(:disabled) {
+.worship-btn:hover:not(:disabled), .worship-btn:active:not(:disabled) {
   background: linear-gradient(135deg, #a00, #c00);
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+  transform: scale(1.06);
 }
 
 .worship-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
@@ -535,7 +559,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   margin-bottom: 1.5rem;
 }
 
@@ -710,11 +734,11 @@ body {
 .fortune-scroll {
   background: linear-gradient(180deg, #f5e6c8, #e8d5a8, #f5e6c8);
   color: #2d1010;
-  padding: 2rem 1.5rem;
-  border-radius: 8px;
+  padding: 2.2rem 1.8rem;
+  border-radius: 10px;
   margin: 1rem auto;
-  max-width: 350px;
-  border: 2px solid #B8860B;
+  max-width: 380px;
+  border: 3px solid #B8860B;
   box-shadow: 0 5px 20px rgba(0,0,0,0.3);
   position: relative;
 }
@@ -735,46 +759,48 @@ body {
   display: inline-block;
   background: var(--dark-red);
   color: var(--gold);
-  padding: 0.3rem 1.5rem;
-  border-radius: 20px;
+  padding: 0.4rem 1.8rem;
+  border-radius: 25px;
   font-family: var(--font-display);
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   margin-bottom: 0.8rem;
-  border: 1px solid var(--gold);
+  border: 2px solid var(--gold);
 }
 
 .fortune-title {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #5e3a1a;
   margin-bottom: 1rem;
 }
 
 .fortune-poem {
   font-family: var(--font-display);
-  font-size: 1.2rem;
-  line-height: 2.2;
+  font-size: 1.3rem;
+  line-height: 2.4;
   color: #3a1a0a;
   white-space: pre-line;
   margin-bottom: 1rem;
 }
 
 .fortune-interpretation {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #6b4a2a;
   border-top: 1px dashed #B8860B;
   padding-top: 0.8rem;
   margin-top: 0.5rem;
+  line-height: 2;
 }
 
 .lucky-advice {
   margin-top: 1rem;
-  padding: 0.8rem;
+  padding: 1rem;
   background: rgba(255, 215, 0, 0.1);
-  border: 1px solid rgba(255, 215, 0, 0.3);
-  border-radius: 10px;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
   color: var(--gold);
-  font-size: 1rem;
+  font-size: 1.1rem;
+  line-height: 2;
 }
 
 /* JiaoBei result display */
@@ -785,12 +811,12 @@ body {
 }
 
 .jiaobei-result .result-icon {
-  font-size: 3rem;
+  font-size: 3.5rem;
 }
 
 .jiaobei-result .result-name {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   margin: 0.5rem 0;
 }
 
@@ -799,17 +825,19 @@ body {
 .jiaobei-result .result-name.angry { color: #e74c3c; }
 
 .jiaobei-result .result-desc {
-  font-size: 0.9rem;
-  color: #b0a090;
+  font-size: 1.05rem;
+  color: #c8b090;
+  line-height: 2;
 }
 
 /* === Donation (香油錢) System === */
 .donation-total-badge {
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   color: var(--text-light);
   margin-left: 0.5rem;
   padding-left: 0.8rem;
-  border-left: 1px solid rgba(255, 215, 0, 0.3);
+  border-left: 2px solid rgba(255, 215, 0, 0.3);
+  font-weight: bold;
 }
 
 .gold-text {
@@ -833,7 +861,7 @@ body {
 }
 
 .donation-box-icon {
-  font-size: 5rem;
+  font-size: 5.5rem;
   filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.4));
   animation: donationBoxGlow 2s ease-in-out infinite alternate;
 }
@@ -845,7 +873,7 @@ body {
 
 .donation-box-label {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: var(--gold);
   margin-top: 0.3rem;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
@@ -889,14 +917,14 @@ body {
 }
 
 .donation-temple-total {
-  font-size: 1rem;
-  color: #d4b896;
+  font-size: 1.1rem;
+  color: #e8d0a8;
   margin-bottom: 0.8rem;
 }
 
 .donation-prompt {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--gold);
   margin-bottom: 1rem;
 }
@@ -911,21 +939,22 @@ body {
 
 .donation-amt-btn {
   font-family: var(--font-main);
-  font-size: 1rem;
-  padding: 0.6rem 1.2rem;
-  border-radius: 25px;
-  border: 1.5px solid rgba(255, 215, 0, 0.4);
+  font-size: 1.1rem;
+  padding: 0.8rem 1.4rem;
+  border-radius: 30px;
+  border: 2px solid rgba(255, 215, 0, 0.45);
   background: linear-gradient(135deg, rgba(139, 0, 0, 0.6), rgba(80, 0, 0, 0.8));
   color: var(--gold);
   cursor: pointer;
   transition: all 0.25s;
   white-space: nowrap;
+  min-height: var(--touch-target);
 }
 
-.donation-amt-btn:hover {
+.donation-amt-btn:hover, .donation-amt-btn:active {
   background: linear-gradient(135deg, #a00, #c00);
   border-color: var(--gold);
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 18px rgba(255, 215, 0, 0.4);
   transform: scale(1.08);
 }
 
@@ -943,16 +972,17 @@ body {
 
 .donation-input {
   font-family: var(--font-main);
-  font-size: 1rem;
-  width: 140px;
-  padding: 0.5rem 0.8rem;
-  border-radius: 20px;
-  border: 1.5px solid rgba(255, 215, 0, 0.3);
-  background: rgba(255, 255, 255, 0.05);
+  font-size: 1.1rem;
+  width: 160px;
+  padding: 0.7rem 1rem;
+  border-radius: 25px;
+  border: 2px solid rgba(255, 215, 0, 0.35);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text-light);
   text-align: center;
   outline: none;
   transition: border-color 0.3s;
+  min-height: var(--touch-target);
 }
 
 .donation-input:focus {
@@ -975,17 +1005,19 @@ body {
 }
 
 .donation-custom-btn {
-  font-size: 0.95rem !important;
-  padding: 0.5rem 1.2rem !important;
+  font-size: 1.1rem !important;
+  padding: 0.7rem 1.4rem !important;
+  min-height: var(--touch-target);
 }
 
 .donation-bless-msg {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   color: var(--gold);
-  min-height: 2rem;
-  padding: 0.5rem;
+  min-height: 2.5rem;
+  padding: 0.6rem;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  line-height: 2;
 }
 
 .amount-bump {
@@ -1000,41 +1032,41 @@ body {
 
 /* === Stamp Collection === */
 .stamp-collection {
-  padding: 3rem 2rem;
+  padding: 2.5rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .stamp-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
   gap: 1rem;
   margin-top: 1.5rem;
 }
 
 .stamp-slot {
   aspect-ratio: 1;
-  border: 2px dashed rgba(255, 215, 0, 0.2);
-  border-radius: 12px;
+  border: 2px dashed rgba(255, 215, 0, 0.25);
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 0.7rem;
-  color: #666;
+  font-size: 0.8rem;
+  color: #777;
   transition: all 0.3s;
-  background: rgba(255,255,255,0.02);
+  background: rgba(255,255,255,0.03);
 }
 
 .stamp-slot.collected {
   border-color: var(--gold);
   border-style: solid;
-  background: rgba(255, 215, 0, 0.05);
+  background: rgba(255, 215, 0, 0.06);
   color: var(--gold);
 }
 
 .stamp-slot .stamp-icon {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 0.3rem;
 }
 
@@ -1044,20 +1076,22 @@ body {
 
 .stamp-slot .stamp-name {
   text-align: center;
-  line-height: 1.3;
+  line-height: 1.4;
+  font-size: 0.85rem;
 }
 
 /* === Footer === */
 .footer {
   text-align: center;
   padding: 3rem 2rem;
-  border-top: 1px solid rgba(255, 215, 0, 0.1);
-  color: #666;
-  font-size: 0.85rem;
+  border-top: 2px solid rgba(255, 215, 0, 0.15);
+  color: #888;
+  font-size: 1rem;
+  line-height: 2;
 }
 
 .footer .footer-emoji {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 0.5rem;
 }
 
@@ -1066,7 +1100,7 @@ body {
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.92);
   z-index: 2000;
   align-items: center;
   justify-content: center;
@@ -1079,52 +1113,66 @@ body {
 .celebration-content {
   text-align: center;
   animation: fadeInUp 0.8s ease-out;
+  padding: 2rem;
 }
 
 .celebration-content h2 {
   font-family: var(--font-display);
-  font-size: 3rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
   color: var(--gold);
   text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
   margin-bottom: 1rem;
 }
 
 .celebration-content p {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--text-light);
   margin-bottom: 0.5rem;
+  line-height: 2;
 }
 
 .celebration-content .big-stamp {
-  font-size: 6rem;
+  font-size: 7rem;
   margin: 1rem 0;
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-/* === Responsive === */
+/* === Responsive (長輩友善) === */
 @media (max-width: 768px) {
+  html { font-size: 18px; }
   .couplet-container { gap: 1rem; }
   .couplet { font-size: 1rem; padding: 1rem 0.5rem; min-height: 150px; }
   .couplet-center { font-size: 2.5rem; width: 70px; height: 70px; }
   .temple-grid { grid-template-columns: 1fr; }
-  .nav-bar { gap: 0.3rem; }
-  .nav-btn { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
-  .modal { border-radius: 15px; margin: 0.5rem; }
-  .modal-body { padding: 1rem 1.5rem 1.5rem; }
-  .stamp-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+  .nav-bar { gap: 0.4rem; padding: 0.6rem 0.8rem; }
+  .nav-btn { padding: 0.5rem 1rem; font-size: 0.95rem; }
+  .modal { border-radius: 18px; margin: 0.3rem; }
+  .modal-body { padding: 1.2rem 1.5rem 1.5rem; }
+  .stamp-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+  .step-buttons { flex-direction: column; align-items: center; }
+  .worship-btn { width: 90%; max-width: 320px; }
+  .donation-amounts { flex-direction: column; align-items: center; }
+  .donation-amt-btn { width: 80%; max-width: 280px; }
+  .celebration-content h2 { font-size: 2rem; }
+  .landing h1 { font-size: clamp(1.8rem, 8vw, 3rem); }
 }
 
 @media (max-width: 480px) {
+  html { font-size: 17px; }
   .lantern-row { gap: 1.5rem; }
-  .lantern { font-size: 2.5rem; }
+  .lantern { font-size: 3rem; }
   .fortune-scroll { padding: 1.5rem 1rem; }
+  .progress-section { flex-direction: column; gap: 0.5rem; }
+  .progress-bar { width: 80%; }
+  .modal-header .temple-icon { font-size: 4rem; }
+  .modal-header h2 { font-size: 1.8rem; }
 }
 
 /* === Scrollbar === */
-::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: #1a0a0a; }
-::-webkit-scrollbar-thumb { background: #4a2020; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #6a3030; }
+::-webkit-scrollbar-thumb { background: #5a2828; border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: #7a3838; }
 
 /* === Utility animations === */
 .fade-in {
@@ -1151,13 +1199,51 @@ body {
 
 .loading-text {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: var(--gold);
   margin-top: 1rem;
   animation: pulse 1.5s ease-in-out infinite;
 }
 
 .loading-icon {
-  font-size: 4rem;
+  font-size: 5rem;
   animation: sway 1s ease-in-out infinite;
+}
+
+/* === Elderly Helper: Warm Intro Banner === */
+.warm-intro {
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.3), rgba(80, 50, 0, 0.2));
+  border: 2px solid rgba(255, 215, 0, 0.25);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin: 0 auto 2rem;
+  max-width: 700px;
+  text-align: center;
+  color: #f0d8b0;
+  font-size: 1.1rem;
+  line-height: 2.2;
+}
+
+.warm-intro .intro-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+
+/* === Focus styles for accessibility === */
+.worship-btn:focus-visible,
+.nav-btn:focus-visible,
+.start-btn:focus-visible,
+.donation-amt-btn:focus-visible,
+.temple-card:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* === Active states for mobile touch === */
+.temple-card:active {
+  transform: scale(0.97);
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
 }

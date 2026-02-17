@@ -23,7 +23,7 @@
   <!-- Loading Screen -->
   <div id="loadingScreen" class="loading-screen">
     <div class="loading-icon">🏮</div>
-    <div class="loading-text">恭迎各路神明降臨...</div>
+    <div class="loading-text">正在為您準備走春祈福...</div>
   </div>
 
   <!-- Firework Canvas -->
@@ -43,7 +43,7 @@
     </div>
 
     <h1>全台廟宇一鍵參拜</h1>
-    <p class="subtitle">🧧 過年走春・線上拜拜・集章祈福 🧧</p>
+    <p class="subtitle">🧧 在家也能走春拜拜・虔心祈福・歡喜迎新年 🧧</p>
 
     <div class="couplet-container">
       <div class="couplet">金龍獻瑞迎新歲</div>
@@ -52,10 +52,10 @@
     </div>
 
     <button id="startBtn" class="start-btn">
-      🙏 開始走春參拜
+      🙏 點這裡開始拜拜
     </button>
 
-    <div class="scroll-hint">⬇️ 往下滑動</div>
+    <div class="scroll-hint">⬇️ 輕輕往下滑</div>
   </section>
 
   <!-- ============ Navigation ============ -->
@@ -80,19 +80,27 @@
 
   <!-- ============ Temple List ============ -->
   <section class="temple-section" id="templeSection">
-    <h2 class="section-title">🏯 選擇廟宇開始參拜</h2>
+    <h2 class="section-title">🏯 選一間廟宇來拜拜吧</h2>
+    <div class="warm-intro">
+      <div class="intro-title">📖 使用說明</div>
+      ❶ 選一間想去的廟宇，按一下就會打開<br>
+      ❷ 按「上香參拜」會幫您點香、行禮<br>
+      ❸ 拜完可以「擲筊」問神明、「抽籤」看運勢<br>
+      ❹ 想添香油錢也可以按「添香油錢」<br>
+      🎫 每拜一間就會蓋一個章，集越多福氣越旺！
+    </div>
     <div id="templeList"></div>
   </section>
 
   <!-- ============ Stamp Collection ============ -->
   <section class="stamp-collection" id="stampSection">
-    <h2 class="section-title">🎫 走春集章冊</h2>
-    <p style="text-align: center; color: #b0a090; margin-bottom: 1rem;">
-      參拜各廟宇即可收集印章，集滿全部即可獲得新春大福！
+    <h2 class="section-title">🎫 我的走春集章冊</h2>
+    <p style="text-align: center; color: #c8b090; margin-bottom: 1rem; font-size: 1.1rem; line-height: 2;">
+      每拜一間廟就會蓋一個印章喔！集越多，新年福氣越旺！
     </p>
     <div class="stamp-grid" id="stampGrid"></div>
     <div style="text-align: center; margin-top: 2rem;">
-      <button id="resetBtn" class="worship-btn" style="font-size: 0.9rem; padding: 0.5rem 1.5rem;">
+      <button id="resetBtn" class="worship-btn" style="font-size: 1rem; padding: 0.8rem 2rem;">
         🔄 重新開始走春
       </button>
     </div>
@@ -130,20 +138,21 @@
   <div class="celebration-modal" id="celebrationModal">
     <div class="celebration-content">
       <div class="big-stamp">🏆</div>
-      <h2>🎊 恭喜完成全台走春！🎊</h2>
-      <p>您已參拜全台所有廟宇</p>
+      <h2>🎊 恭喜您完成全台走春！🎊</h2>
+      <p>您已經參拜了全台所有廟宇</p>
+      <p>真是太厲害了！</p>
       <p>新的一年必定 — 諸事大吉、萬事如意！</p>
-      <p style="margin-top: 2rem; font-size: 3rem;">🧧🎆🏮🎉🧨</p>
-      <p style="margin-top: 1rem; color: #b0a090; font-size: 0.9rem;">（點擊任意處關閉）</p>
+      <p style="margin-top: 2rem; font-size: 3.5rem;">🧧🎆🏮🎉🧨</p>
+      <p style="margin-top: 1rem; color: #c8b090; font-size: 1rem;">（按一下任何地方就可以關閉）</p>
     </div>
   </div>
 
   <!-- ============ Footer ============ -->
   <footer class="footer">
     <div class="footer-emoji">🏮🧧🎊</div>
-    <p>全台廟宇一鍵參拜 — 走春拜拜不出門</p>
+    <p>全台廟宇一鍵參拜 — 在家走春拜拜，闔家歡喜</p>
     <p>恭喜發財 🧧 新年快樂 🎆 闔家平安</p>
-    <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #555;">
+    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #777;">
       本服務僅供走春趣味體驗，請尊重各廟宇信仰文化 🙏
     </p>
   </footer>
